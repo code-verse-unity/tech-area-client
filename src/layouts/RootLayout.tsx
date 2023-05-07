@@ -2,9 +2,11 @@ import LeftNavigation from "@/components/LeftNavigation";
 import Navigation from "@/components/Navigation";
 import RightNavigation from "@/components/RightNavigation";
 import {
+  AspectRatio,
   BackgroundImage,
   Box,
   Grid,
+  Overlay,
   Text,
   Title,
   createStyles,
@@ -21,7 +23,7 @@ const useStyles = createStyles((theme) => ({
     backgroundColor:
       theme.colorScheme === "dark"
         ? theme.colors.dark[7]
-        : theme.colors.gray[0],
+        : theme.colors.gray[1],
   },
 }));
 
@@ -31,7 +33,7 @@ export default function RootLayout() {
     <div>
       <Navigation />
       <Box maw="100vw">
-        <BackgroundImage src={HomeCover} m={0} h={230}>
+        <BackgroundImage src={HomeCover} m={0} h={230} maw="100vw">
           <Box
             px="md"
             sx={{
