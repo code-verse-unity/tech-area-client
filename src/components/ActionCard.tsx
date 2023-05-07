@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Box,
   Button,
   Divider,
@@ -7,15 +8,24 @@ import {
   Stack,
   Text,
   Title,
+  Tooltip,
   createStyles,
   useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import {
+  IconCalendar,
+  IconDeviceGamepad,
+  IconGoGame,
+  IconQuestionMark,
+} from "@tabler/icons-react";
 import { IconAdCircleFilled, IconPlus } from "@tabler/icons-react";
+import NewQuestionModal from "./NewQuestionModal";
 
 const useStyles = createStyles((theme) => ({
   container: {
     borderRadius: theme.spacing.xs,
+    boxShadow: theme.shadows.md,
     padding: 10,
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[4] : "white",
@@ -42,49 +52,27 @@ const ActionCard: React.FC<Props> = ({}) => {
   const { classes } = useStyles();
   return (
     <>
-      <Stack className={classes.container}>
-        <Group>
-          <Group position="apart" px="md">
-            <Text className={classes.text} fw={500}>
-              Actions
-            </Text>
-          </Group>
+      <Group className={classes.container}>
+        <Tooltip label="Ask a new question">
+          <ActionIcon color="green" radius="xl" variant="filled" onClick={open}>
+            <IconPlus size="1.125rem" />
+          </ActionIcon>
+        </Tooltip>
 
-          <Divider
-            my="sm"
-            mx="-md"
-            color={theme.colorScheme === "dark" ? "red" : "gray.1"}
-          />
-          <Stack spacing={3}>
-            <Text>Do you have something in mind ?</Text>
-            <Button size="sm" leftIcon={<IconPlus />} onClick={open}>
-              Ask question
-            </Button>
-          </Stack>
+        <Tooltip label="Create a challenge">
+          <ActionIcon color="orange.6" radius="xl" variant="filled">
+            <IconDeviceGamepad size="1.125rem" />
+          </ActionIcon>
+        </Tooltip>
 
-          <Stack spacing={3}>
-            <Text>Do you have something in mind ?</Text>
-            <Button size="sm" leftIcon={<IconPlus />} onClick={open}>
-              Ask question
-            </Button>
-          </Stack>
-        </Group>
-      </Stack>
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Ask your question"
-        overlayProps={{
-          color:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[9]
-              : theme.colors.gray[2],
-          opacity: 0.55,
-          blur: 3,
-        }}
-      >
-        New question
-      </Modal>
+        <Tooltip label="Publish an event">
+          <ActionIcon color="blue.7" radius="xl" variant="filled">
+            <IconCalendar size="1.125rem" />
+          </ActionIcon>
+        </Tooltip>
+      </Group>
+
+      <NewQuestionModal opened={opened} onClose={close} />
     </>
   );
 };
