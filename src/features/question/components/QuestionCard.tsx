@@ -69,7 +69,7 @@ const QuestionCard: React.FC<Props> = ({}) => {
             necessitatibus possimus quam perspiciatis eos.
           </p>
 
-          <Group>
+          <Flex sx={{ gap: 4 }}>
             <Badge component="a" href="/tag" color="green" variant="filled">
               Badge
             </Badge>
@@ -82,7 +82,7 @@ const QuestionCard: React.FC<Props> = ({}) => {
             <Badge color="blue" variant="filled">
               Badge
             </Badge>
-          </Group>
+          </Flex>
           <Text className={classes.text} mt={5}>
             <b>4</b> answers
           </Text>

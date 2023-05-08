@@ -33,6 +33,7 @@ import {
   IconSun,
   IconMoonStars,
 } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -112,21 +113,25 @@ const mockdata = [
     icon: IconCode,
     title: "Questions",
     description: "This Pokémon’s cry is very loud and distracting",
+    href: "/questions",
   },
   {
     icon: IconCoin,
     title: "Challenges",
     description: "The fluid of Smeargle’s tail secretions changes",
+    href: "/challenges",
   },
   {
     icon: IconBook,
     title: "Events",
     description: "Yanma is capable of seeing 360 degrees without",
+    href: "/events",
   },
   {
     icon: IconFingerprint,
     title: "Other feature",
     description: "The shell’s rounded shape and the grooves on its.",
+    href: "/other-features",
   },
 ];
 
@@ -136,9 +141,14 @@ export default function Navigation() {
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = useStyles();
   const { toggleColorScheme } = useMantineColorScheme();
+  const navigate = useNavigate();
 
   const links = mockdata.map((item) => (
-    <UnstyledButton className={classes.subLink} key={item.title}>
+    <UnstyledButton
+      className={classes.subLink}
+      key={item.title}
+      onClick={() => navigate(item.href)}
+    >
       <Group noWrap align="flex-start">
         <ThemeIcon size={34} variant="default" radius="md">
           <item.icon size={rem(22)} color={theme.fn.primaryColor()} />
@@ -165,7 +175,7 @@ export default function Navigation() {
             spacing={0}
             className={classes.hiddenMobile}
           >
-            <a href="#" className={classes.link}>
+            <a href="/" className={classes.link}>
               Home
             </a>
             <HoverCard
@@ -251,8 +261,12 @@ export default function Navigation() {
                 />
               }
             />
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+            <Button variant="default" component="a" href="/auth/login">
+              Log in
+            </Button>
+            <Button component="a" href="/auth/register">
+              Sign up
+            </Button>
           </Group>
           <Burger
             opened={drawerOpened}

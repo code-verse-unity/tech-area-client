@@ -24,6 +24,8 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark"
         ? theme.colors.dark[7]
         : theme.colors.gray[1],
+
+    height: "200rem",
   },
 }));
 
@@ -53,7 +55,7 @@ export default function RootLayout() {
           </Box>
         </BackgroundImage>
       </Box>
-      <Box w={"100vw"} sx={{ overflow: "hidden" }}>
+      <Box sx={{ overflow: "hidden" }}>
         <Grid>
           <Grid.Col span={3} className={classes.wrapper}>
             <LeftNavigation />

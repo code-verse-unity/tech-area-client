@@ -1,6 +1,9 @@
 import { Route, Routes as ReactRoutes, useLocation } from "react-router-dom";
 import RootLayout from "@/layouts/RootLayout";
 import HomePage from "@/features/question/pages/HomePage";
+import QuestionsPage from "@/features/question/pages/QuestionsPage";
+import { RegisterPage, LoginPage } from "@/features/auth";
+import AuthLayout from "@/layouts/AuthLayout";
 
 const Routes = () => {
   const location = useLocation();
@@ -12,16 +15,16 @@ const Routes = () => {
         <Route path="users" element={<HomePage />} />
         <Route path="users/:userId" element={<HomePage />} />
         <Route path="tags" element={<HomePage />} />
-        <Route path="questions" element={<HomePage />} />
+        <Route path="questions" element={<QuestionsPage />} />
         <Route path="questions/:questionId" element={<HomePage />} />
         <Route path="events" element={<HomePage />} />
         <Route path="challenges" element={<HomePage />} />
         <Route path="profile" element={<HomePage />} />
       </Route>
 
-      <Route path="/auth" element={<HomePage />}>
-        <Route path="login" element={<HomePage />} />
-        <Route path="register" element={<HomePage />} />
+      <Route path="/auth" element={<AuthLayout />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
         <Route path="forgot-password" element={<HomePage />} />
         <Route path="reset-password" element={<HomePage />} />
       </Route>
