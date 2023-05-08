@@ -1,11 +1,24 @@
-import { Box } from "@mantine/core";
+import { Box, Stack, createStyles } from "@mantine/core";
 import ActionCard from "./ActionCard";
+import { SIDE_TOP_PADDING } from "@/constants/sizes";
+import PopularEvent from "./PopularEvent";
+import PopularChallengeList from "./PopularChallengeList";
+
+const useStyles = createStyles((theme) => ({
+  sticky: {
+    position: "sticky",
+    top: 0,
+  },
+}));
 
 const RightNavigation = () => {
+  const { classes } = useStyles();
   return (
-    <Box py="md" pr="md">
+    <Stack pr="md" pt={SIDE_TOP_PADDING} className={classes.sticky}>
       <ActionCard />
-    </Box>
+      <PopularEvent />
+      <PopularChallengeList />
+    </Stack>
   );
 };
 
