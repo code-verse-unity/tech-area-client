@@ -11,24 +11,28 @@ import { Outlet } from "react-router-dom";
 const useStyles = createStyles((theme) => ({
   container: {
     height: "100vh",
-    // width: "100vw",
-    // overflow: "hidden",
-    // border: "dotted",
     display: "flex",
   },
   text: {
     color: "white",
     margin: 0,
-    textAlign: "center",
   },
   sideContainer: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "start",
     justifyContent: "center",
     padding: "1rem 2rem",
     width: 300,
     gap: "1rem",
+    [theme.fn.smallerThan("sm")]: {
+      display: "none",
+    },
+  },
+  logo: {
+    position: "absolute",
+    left: "5rem",
+    top: "1rem",
   },
 }));
 
@@ -40,6 +44,9 @@ const AuthLayout: React.FC<Props> = ({}) => {
   const { classes } = useStyles();
   return (
     <div className={classes.container}>
+      <Box component="a" href="/" className={classes.logo}>
+        Tech area
+      </Box>
       <Box sx={{ flexGrow: 1 }}>
         <Outlet />
       </Box>
