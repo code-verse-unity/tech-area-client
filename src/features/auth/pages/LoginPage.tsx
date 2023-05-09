@@ -1,4 +1,6 @@
 import {
+  ActionIcon,
+  Avatar,
   Button,
   Center,
   Divider,
@@ -8,27 +10,43 @@ import {
   PasswordInput,
   Stack,
   Text,
+  TextInput,
   Title,
   createStyles,
 } from "@mantine/core";
-import {
-  IconBrandFacebook,
-  IconBrandGoogle,
-  IconBrandLinkedin,
-} from "@tabler/icons-react";
+import { useForm, yupResolver } from "@mantine/form";
 import { useState } from "react";
+import * as Yup from "yup";
 
 const useStyles = createStyles((theme) => ({
-  container: {},
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+    width: "100%",
+  },
 }));
 
 interface Props {
   // Props type definition here
 }
 
+const schema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().min(8, "Your password must a least 8 characters"),
+});
+
 const LoginPage: React.FC<Props> = ({}) => {
   const { classes } = useStyles();
   const [loading, setloading] = useState(false);
+
+  const form = useForm({
+    validate: yupResolver(schema),
+    initialValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const handleSubmit = () => {
     setloading(true);
@@ -42,10 +60,16 @@ const LoginPage: React.FC<Props> = ({}) => {
       <Stack align="center">
         <Title>Login to your account</Title>
         <Text>Login using social networks</Text>
-        <Group>
-          <IconBrandFacebook />
-          <IconBrandGoogle />
-          <IconBrandLinkedin />
+        <Group spacing={30}>
+          <ActionIcon>
+            <Avatar size="md" src="/facebook.svg" />
+          </ActionIcon>
+          <ActionIcon>
+            <Avatar size="md" src="/google.svg" />
+          </ActionIcon>
+          <ActionIcon>
+            <Avatar size="md" src="/linkedin.svg" />
+          </ActionIcon>
         </Group>
 
         <Flex justify="center" align="center" gap={10}>
@@ -55,13 +79,27 @@ const LoginPage: React.FC<Props> = ({}) => {
           <Divider h={10} w="150px" color="green" />
         </Flex>
 
-        <Input type="text" name="email" w="100%" disabled={loading} />
-        <PasswordInput w="100%" name="password" disabled={loading} />
-        <Center w="100%">
-          <Button w="100%" disabled={loading} onClick={handleSubmit}>
-            Sign in
-          </Button>
-        </Center>
+        <form
+          onSubmit={form.onSubmit((values) => console.log(values))}
+          className={classes.form}
+        >
+          <TextInput
+            w="100%"
+            disabled={loading}
+            placeholder="example@mail.com"
+            {...form.getInputProps("email")}
+          />
+          <PasswordInput
+            w="100%"
+            disabled={loading}
+            {...form.getInputProps("password")}
+          />
+          <Center w="100%">
+            <Button fullWidth loading={loading} type="submit">
+              Sign in
+            </Button>
+          </Center>
+        </form>
       </Stack>
     </Center>
   );
