@@ -74,6 +74,7 @@ const LoginPage: React.FC<Props> = ({}) => {
 
         <Flex justify="center" align="center" gap={10}>
           {/* TODO: fix the dividers */}
+          {/* text */}
           <Divider h={10} w="150px" color="green" />
           <div>or</div>
           <Divider h={10} w="150px" color="green" />
