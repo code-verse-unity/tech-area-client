@@ -7,6 +7,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useState } from "react";
+import RichEditor from "./RichTextEditor";
 
 interface Props extends ModalProps {}
 
@@ -30,13 +31,15 @@ const NewQuestionModal: React.FC<Props> = ({ opened, onClose }) => {
         opacity: 0.55,
         blur: 3,
       }}
+      size="lg"
     >
-      <Stack h={300}>
+      <Stack py={10}>
         <TextInput
           placeholder="What is your question"
           label="Question"
           withAsterisk
         />
+        <RichEditor />
         <MultiSelect
           label="Choose tag for you question"
           data={data}
