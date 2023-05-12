@@ -33,6 +33,9 @@ const useStyles = createStyles((theme) => ({
     position: "absolute",
     left: "5rem",
     top: "1rem",
+    [theme.fn.smallerThan("sm")]: {
+      left: "1.5rem",
+    },
   },
 }));
 

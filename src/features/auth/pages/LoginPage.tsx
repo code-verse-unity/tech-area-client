@@ -80,7 +80,7 @@ const LoginPage: React.FC<Props> = ({}) => {
         </Flex>
 
         <form
-          onSubmit={form.onSubmit((values) => console.log(values))}
+          onSubmit={form.onSubmit((values) => handleSubmit())}
           className={classes.form}
         >
           <TextInput

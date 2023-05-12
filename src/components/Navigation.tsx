@@ -19,6 +19,7 @@ import {
   rem,
   Switch,
   useMantineColorScheme,
+  Container,
 } from "@mantine/core";
 
 import { useDisclosure } from "@mantine/hooks";
@@ -167,113 +168,119 @@ export default function Navigation() {
 
   return (
     <Box>
-      <Header height={60} px="md">
-        <Group position="apart" sx={{ height: "100%" }}>
-          Logo
-          <Group
-            sx={{ height: "100%" }}
-            spacing={0}
-            className={classes.hiddenMobile}
-          >
-            <a href="/" className={classes.link}>
-              Home
-            </a>
-            <HoverCard
-              width={600}
-              position="bottom"
-              radius="md"
-              shadow="md"
-              withinPortal
+      <Header
+        height={60}
+        px="md"
+        sx={{ display: "flex", alignItems: "center" }}
+      >
+        <Container size="xl" w="100%">
+          <Group position="apart" sx={{ height: "100%" }}>
+            Logo
+            <Group
+              sx={{ height: "100%" }}
+              spacing={0}
+              className={classes.hiddenMobile}
             >
-              <HoverCard.Target>
-                <a href="#" className={classes.link}>
-                  <Center inline>
-                    <Box component="span" mr={5}>
+              <a href="/" className={classes.link}>
+                Home
+              </a>
+              <HoverCard
+                width={600}
+                position="bottom"
+                radius="md"
+                shadow="md"
+                withinPortal
+              >
+                <HoverCard.Target>
+                  <a href="#" className={classes.link}>
+                    <Center inline>
+                      <Box component="span" mr={5}>
+                        Features
+                      </Box>
+                      <IconChevronDown
+                        size={16}
+                        color={theme.fn.primaryColor()}
+                      />
+                    </Center>
+                  </a>
+                </HoverCard.Target>
+
+                <HoverCard.Dropdown sx={{ overflow: "hidden" }}>
+                  <Group position="apart" px="md">
+                    <Text className={classes.text} fw={500}>
                       Features
-                    </Box>
-                    <IconChevronDown
-                      size={16}
-                      color={theme.fn.primaryColor()}
-                    />
-                  </Center>
-                </a>
-              </HoverCard.Target>
-
-              <HoverCard.Dropdown sx={{ overflow: "hidden" }}>
-                <Group position="apart" px="md">
-                  <Text className={classes.text} fw={500}>
-                    Features
-                  </Text>
-                  <Anchor href="#" fz="xs">
-                    View all
-                  </Anchor>
-                </Group>
-
-                <Divider
-                  my="sm"
-                  mx="-md"
-                  color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-                />
-
-                <SimpleGrid cols={2} spacing={0}>
-                  {links}
-                </SimpleGrid>
-
-                <div className={classes.dropdownFooter}>
-                  <Group position="apart">
-                    <div>
-                      <Text className={classes.text} fw={500} fz="sm">
-                        Get started
-                      </Text>
-                      <Text size="xs" color="dimmed">
-                        Their food sources have decreased, and their numbers
-                      </Text>
-                    </div>
-                    <Button variant="default">Get started</Button>
+                    </Text>
+                    <Anchor href="#" fz="xs">
+                      View all
+                    </Anchor>
                   </Group>
-                </div>
-              </HoverCard.Dropdown>
-            </HoverCard>
-            <a href="#" className={classes.link}>
-              Challenges
-            </a>
-            <a href="#" className={classes.link}>
-              Events
-            </a>
-          </Group>
-          <Group className={classes.hiddenMobile}>
-            <Switch
-              size="lg"
-              color={theme.colorScheme === "dark" ? "gray" : "dark"}
-              onClick={() => toggleColorScheme()}
-              onLabel={
-                <IconSun
-                  size="1rem"
-                  stroke={2.5}
-                  color={theme.colors.yellow[5]}
-                />
-              }
-              offLabel={
-                <IconMoonStars
-                  size="1rem"
-                  stroke={2.5}
-                  color={theme.colors.green[5]}
-                />
-              }
+
+                  <Divider
+                    my="sm"
+                    mx="-md"
+                    color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+                  />
+
+                  <SimpleGrid cols={2} spacing={0}>
+                    {links}
+                  </SimpleGrid>
+
+                  <div className={classes.dropdownFooter}>
+                    <Group position="apart">
+                      <div>
+                        <Text className={classes.text} fw={500} fz="sm">
+                          Get started
+                        </Text>
+                        <Text size="xs" color="dimmed">
+                          Their food sources have decreased, and their numbers
+                        </Text>
+                      </div>
+                      <Button variant="default">Get started</Button>
+                    </Group>
+                  </div>
+                </HoverCard.Dropdown>
+              </HoverCard>
+              <a href="#" className={classes.link}>
+                Challenges
+              </a>
+              <a href="#" className={classes.link}>
+                Events
+              </a>
+            </Group>
+            <Group className={classes.hiddenMobile}>
+              <Switch
+                size="lg"
+                color={theme.colorScheme === "dark" ? "gray" : "dark"}
+                onClick={() => toggleColorScheme()}
+                onLabel={
+                  <IconSun
+                    size="1rem"
+                    stroke={2.5}
+                    color={theme.colors.yellow[5]}
+                  />
+                }
+                offLabel={
+                  <IconMoonStars
+                    size="1rem"
+                    stroke={2.5}
+                    color={theme.colors.green[5]}
+                  />
+                }
+              />
+              <Button variant="default" component="a" href="/auth/login">
+                Log in
+              </Button>
+              <Button component="a" href="/auth/register">
+                Sign up
+              </Button>
+            </Group>
+            <Burger
+              opened={drawerOpened}
+              onClick={toggleDrawer}
+              className={classes.hiddenDesktop}
             />
-            <Button variant="default" component="a" href="/auth/login">
-              Log in
-            </Button>
-            <Button component="a" href="/auth/register">
-              Sign up
-            </Button>
           </Group>
-          <Burger
-            opened={drawerOpened}
-            onClick={toggleDrawer}
-            className={classes.hiddenDesktop}
-          />
-        </Group>
+        </Container>
       </Header>
 
       <Drawer
