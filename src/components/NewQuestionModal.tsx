@@ -10,6 +10,9 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import RichEditor from "./RichTextEditor";
+import { useForm, yupResolver } from "@mantine/form";
+import { QuestionFormValues } from "@/features/question/types";
+import * as Yup from "yup";
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -21,6 +24,17 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+const schema = Yup.object().shape({
+  title: Yup.string().required("Title is required"),
+  // description: Yup.string()
+  //   .required("Description is required")
+  //   .min(20, "The description should be more than 20 chars."),
+  tags: Yup.array()
+    .max(10, "Only 10 tags are allowed")
+    .min(1, "Provide at least one tag")
+    .of(Yup.string()),
+});
+
 interface Props extends ModalProps {}
 
 const NewQuestionModal: React.FC<Props> = ({ opened, onClose }) => {
@@ -31,15 +45,25 @@ const NewQuestionModal: React.FC<Props> = ({ opened, onClose }) => {
     { value: "ng", label: "Angular" },
   ]);
   const [loading, setloading] = useState(false);
+  const form = useForm<QuestionFormValues>({
+    validate: yupResolver(schema),
+    initialValues: {
+      tags: [],
+      title: "",
+      description: "",
+    },
+  });
 
-  const handleSubmit = () => {
+  const handleSubmit = (values: QuestionFormValues) => {
     setloading(true);
-
+    console.log(values);
+    form.reset();
     setTimeout(() => {
       setloading(false);
       onClose();
     }, 1000);
   };
+
   return (
     <Modal
       opened={opened}
@@ -55,19 +79,14 @@ const NewQuestionModal: React.FC<Props> = ({ opened, onClose }) => {
       }}
       size="lg"
     >
-      <form
-        className={classes.form}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
+      <form className={classes.form} onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
           placeholder="What is your question"
           label="Question"
           withAsterisk
+          {...form.getInputProps("title")}
         />
-        <RichEditor />
+        <RichEditor form={form} />
         <MultiSelect
           label="Choose tag for you question"
           data={data}
@@ -75,12 +94,14 @@ const NewQuestionModal: React.FC<Props> = ({ opened, onClose }) => {
           withAsterisk
           searchable
           creatable
+          maxSelectedValues={10}
           getCreateLabel={(query) => `+ Create ${query}`}
           onCreate={(query) => {
             const item = { value: query, label: query };
             setData((current) => [...current, item]);
             return item;
           }}
+          {...form.getInputProps("tags")}
         />
         <Button type="submit" loading={loading}>
           Publish

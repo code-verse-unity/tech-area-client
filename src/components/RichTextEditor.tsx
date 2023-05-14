@@ -8,11 +8,16 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { lowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { Button } from "@mantine/core";
+import { GetInputProps, UseFormReturnType } from "@mantine/form/lib/types";
+import { QuestionFormValues } from "@/features/question/types";
 
-// lowlight.registerLanguage("ts", tsLanguageSyntax);
+interface Props {
+  form: UseFormReturnType<QuestionFormValues>;
+}
 
-export default function RichEditor() {
+export default function RichEditor({ form }: Props) {
+  const inputProps = form.getInputProps("description");
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -27,6 +32,10 @@ export default function RichEditor() {
         defaultLanguage: "ts",
       }),
     ],
+    content: inputProps.value,
+    onUpdate(props) {
+      form.setFieldValue("description", props.editor.getHTML());
+    },
   });
 
   return (
