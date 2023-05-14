@@ -20,6 +20,7 @@ const useStyles = createStyles((theme) => ({
   container: {
     borderRadius: theme.spacing.sm,
     marginBottom: theme.spacing.xs,
+    boxShadow: theme.shadows.lg,
     padding: theme.spacing.md,
     backgroundColor:
       theme.colorScheme === "dark"

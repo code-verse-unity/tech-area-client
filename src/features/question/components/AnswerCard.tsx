@@ -3,17 +3,19 @@ import {
   Avatar,
   Button,
   Flex,
+  Stack,
   Text,
   createStyles,
 } from "@mantine/core";
 import { useColorScheme, useToggle } from "@mantine/hooks";
 import { Link } from "react-router-dom";
+import CommentCard from "./CommentCard";
 
 const useStyles = createStyles((theme) => ({
   container: {
     borderRadius: theme.spacing.sm,
-    marginBottom: theme.spacing.xs,
     padding: theme.spacing.md,
+    boxShadow: theme.shadows.lg,
     backgroundColor:
       theme.colorScheme === "dark"
         ? theme.colors.dark[3]
@@ -36,6 +38,9 @@ const useStyles = createStyles((theme) => ({
     color: theme.colorScheme === "dark" ? "#fff" : theme.black,
     textDecoration: "none",
   },
+  accordion: {
+    backgroundColor: theme.colorScheme === "dark" ? "#444559" : undefined,
+  },
 }));
 
 interface Props {
@@ -47,7 +52,7 @@ const AnswerCard: React.FC<Props> = ({}) => {
   const [approved, toggle] = useToggle([false, true]);
   const theme = useColorScheme();
   return (
-    <Accordion.Item value="a" mb="md">
+    <Accordion.Item value="a" mb="md" className={classes.accordion}>
       <div className={classes.container}>
         {/* Heading */}
         <Flex justify="space-between">
@@ -97,14 +102,21 @@ const AnswerCard: React.FC<Props> = ({}) => {
             </Text>
           </Flex>
           <Flex className={classes.text} align="center">
-            <Accordion.Control>
+            <Accordion.Control bg="#fff0">
               <Text fz="sm">Show comments</Text>
             </Accordion.Control>
           </Flex>
         </Flex>
       </div>
 
-      <Accordion.Panel>Answer list</Accordion.Panel>
+      <Accordion.Panel className={classes.accordion}>
+        <Stack>
+          Comments
+          {[...Array(3).keys()].map((comment) => (
+            <CommentCard />
+          ))}
+        </Stack>
+      </Accordion.Panel>
     </Accordion.Item>
   );
 };
