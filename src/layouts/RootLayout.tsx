@@ -11,9 +11,11 @@ import {
   Text,
   Title,
   createStyles,
+  useMantineTheme,
 } from "@mantine/core";
 import HomeCover from "@/assets/img/home-cover.jpg";
 import { Outlet, useLocation } from "react-router-dom";
+import { useMediaQuery } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   body: {
@@ -31,6 +33,9 @@ const useStyles = createStyles((theme) => ({
 export default function RootLayout() {
   const { classes } = useStyles();
   const location = useLocation();
+  const theme = useMantineTheme();
+  const isMobile = useMediaQuery("(max-width: 750px)");
+
   return (
     <div className={classes.wrapper}>
       <Navigation />
@@ -62,13 +67,13 @@ export default function RootLayout() {
       <Box sx={{ overflow: "hidden" }}>
         <Container size="xl">
           <Grid>
-            <Grid.Col span={3}>
+            <Grid.Col span={3} hidden={isMobile}>
               <LeftNavigation />
             </Grid.Col>
-            <Grid.Col span={6} className={classes.body}>
+            <Grid.Col xs={12} md={6} className={classes.body}>
               <Outlet />
             </Grid.Col>
-            <Grid.Col span={3}>
+            <Grid.Col span={3} hidden={isMobile}>
               <RightNavigation />
             </Grid.Col>
           </Grid>
