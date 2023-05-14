@@ -13,7 +13,7 @@ import {
   createStyles,
 } from "@mantine/core";
 import HomeCover from "@/assets/img/home-cover.jpg";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   body: {
@@ -30,31 +30,34 @@ const useStyles = createStyles((theme) => ({
 
 export default function RootLayout() {
   const { classes } = useStyles();
+  const location = useLocation();
   return (
     <div className={classes.wrapper}>
       <Navigation />
       <Box maw="100vw">
-        <BackgroundImage src={HomeCover} m={0} h={230} maw="100vw">
-          <Container h="100%" size="xl">
-            <Box
-              px="md"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                height: "100%",
-              }}
-            >
-              <Title color="dark">Home</Title>
-              <Text maw={600} color="dark">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Repudiandae obcaecati debitis animi harum alias sit corporis,
-                aliquam maiores neque nam temporibus numquam itaque, odit
-                cupiditate ipsa consequuntur unde enim libero?
-              </Text>
-            </Box>
-          </Container>
-        </BackgroundImage>
+        {location.pathname === "/" && (
+          <BackgroundImage src={HomeCover} m={0} h={230} maw="100vw">
+            <Container h="100%" size="xl">
+              <Box
+                px="md"
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <Title color="dark">Home</Title>
+                <Text maw={600} color="dark">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Repudiandae obcaecati debitis animi harum alias sit corporis,
+                  aliquam maiores neque nam temporibus numquam itaque, odit
+                  cupiditate ipsa consequuntur unde enim libero?
+                </Text>
+              </Box>
+            </Container>
+          </BackgroundImage>
+        )}
       </Box>
       <Box sx={{ overflow: "hidden" }}>
         <Container size="xl">
