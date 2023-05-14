@@ -173,7 +173,7 @@ export default function Navigation() {
         px="md"
         sx={{ display: "flex", alignItems: "center" }}
       >
-        <Container size="xl" w="100%">
+        <Container size="xl" w="100%" sx={{ height: "100%" }}>
           <Group position="apart" sx={{ height: "100%" }}>
             Logo
             <Group

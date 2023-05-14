@@ -4,6 +4,7 @@ import HomePage from "@/features/question/pages/HomePage";
 import QuestionsPage from "@/features/question/pages/QuestionsPage";
 import { RegisterPage, LoginPage } from "@/features/auth";
 import AuthLayout from "@/layouts/AuthLayout";
+import QuestionDetails from "@/features/question/pages/QuestionDetails";
 
 const Routes = () => {
   const location = useLocation();
@@ -16,7 +17,7 @@ const Routes = () => {
         <Route path="users/:userId" element={<HomePage />} />
         <Route path="tags" element={<HomePage />} />
         <Route path="questions" element={<QuestionsPage />} />
-        <Route path="questions/:questionId" element={<HomePage />} />
+        <Route path="questions/:questionId" element={<QuestionDetails />} />
         <Route path="events" element={<HomePage />} />
         <Route path="challenges" element={<HomePage />} />
         <Route path="profile" element={<HomePage />} />

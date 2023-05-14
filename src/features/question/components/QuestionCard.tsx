@@ -11,6 +11,7 @@ import {
   Title,
   createStyles,
 } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -37,6 +38,7 @@ const useStyles = createStyles((theme) => ({
   },
   title: {
     color: theme.colorScheme === "dark" ? "#fff" : theme.black,
+    textDecoration: "none",
   },
 }));
 
@@ -59,8 +61,10 @@ const QuestionCard: React.FC<Props> = ({}) => {
             <Text className={classes.username}>User name</Text>
             <Text className={classes.time}>2 min ago</Text>
           </Flex>
-          <Title order={4} className={classes.title}>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit,{" "}
+          <Title order={4}>
+            <Link to={"/questions/1"} className={classes.title}>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit,{" "}
+            </Link>
           </Title>
           <p className={classes.text}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
