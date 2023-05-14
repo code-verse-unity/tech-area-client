@@ -34,7 +34,7 @@ import {
   IconSun,
   IconMoonStars,
 } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -181,9 +181,9 @@ export default function Navigation() {
               spacing={0}
               className={classes.hiddenMobile}
             >
-              <a href="/" className={classes.link}>
+              <Link to="/" className={classes.link}>
                 Home
-              </a>
+              </Link>
               <HoverCard
                 width={600}
                 position="bottom"
@@ -267,10 +267,10 @@ export default function Navigation() {
                   />
                 }
               />
-              <Button variant="default" component="a" href="/auth/login">
+              <Button variant="default" component={Link} to="/auth/login">
                 Log in
               </Button>
-              <Button component="a" href="/auth/register">
+              <Button component={Link} to="/auth/register">
                 Sign up
               </Button>
             </Group>

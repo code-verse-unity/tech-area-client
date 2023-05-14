@@ -1,12 +1,110 @@
+import {
+  ActionIcon,
+  Avatar,
+  Button,
+  Center,
+  Divider,
+  Flex,
+  Group,
+  Input,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+  createStyles,
+} from "@mantine/core";
+import { useForm, yupResolver } from "@mantine/form";
+import { useState } from "react";
+import * as Yup from "yup";
+
+const useStyles = createStyles((theme) => ({
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+    width: "100%",
+  },
+}));
+
 interface Props {
   // Props type definition here
 }
 
+const schema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().min(8, "Your password must a least 8 characters"),
+});
+
 const RegisterPage: React.FC<Props> = ({}) => {
+  const { classes } = useStyles();
+  const [loading, setloading] = useState(false);
+
+  const form = useForm({
+    validate: yupResolver(schema),
+    initialValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleSubmit = () => {
+    setloading(true);
+
+    setTimeout(() => {
+      setloading(false);
+    }, 1000);
+  };
   return (
-    <div>
-      <p>Hello, I am a typescript functional component!</p>
-    </div>
+    <Center h="100%">
+      <Stack align="center">
+        <Title>Create a new account</Title>
+        <Text>Create using social networks</Text>
+        <Group spacing={30}>
+          <ActionIcon>
+            <Avatar size="md" src="/facebook.svg" />
+          </ActionIcon>
+          <ActionIcon>
+            <Avatar size="md" src="/google.svg" />
+          </ActionIcon>
+          <ActionIcon>
+            <Avatar size="md" src="/linkedin.svg" />
+          </ActionIcon>
+        </Group>
+
+        <Flex justify="center" align="center" gap={10}>
+          {/* TODO: fix the dividers */}
+          <Divider h={10} w="150px" color="green" />
+          <div>or</div>
+          <Divider h={10} w="150px" color="green" />
+        </Flex>
+
+        <form
+          onSubmit={form.onSubmit((values) => handleSubmit())}
+          className={classes.form}
+        >
+          <TextInput
+            w="100%"
+            disabled={loading}
+            placeholder="example@mail.com"
+            autoComplete="off"
+            {...form.getInputProps("email")}
+          />
+          <PasswordInput
+            w="100%"
+            disabled={loading}
+            autoComplete="new-password"
+            placeholder="***********"
+            {...form.getInputProps("password")}
+          />
+          <Center w="100%">
+            <Button fullWidth loading={loading} type="submit">
+              Register
+            </Button>
+          </Center>
+        </form>
+      </Stack>
+    </Center>
   );
 };
 

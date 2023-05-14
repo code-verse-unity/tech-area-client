@@ -6,7 +6,7 @@ import {
   Grid,
   createStyles,
 } from "@mantine/core";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -45,21 +45,46 @@ interface Props {
 
 const AuthLayout: React.FC<Props> = ({}) => {
   const { classes } = useStyles();
+  const location = useLocation();
+
+  const SideContext = () => (
+    <>
+      {location.pathname.includes("login") ? (
+        <>
+          <h2 className={classes.text}>New Here</h2>
+          <p className={classes.text}>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim
+            asperiores fuga atque accusantium dignissimos reprehenderit
+          </p>
+          <Button component={Link} to="/auth/register">
+            Register now
+          </Button>
+        </>
+      ) : (
+        <>
+          <h2 className={classes.text}>Already have an account</h2>
+          <p className={classes.text}>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim
+            asperiores fuga atque accusantium dignissimos reprehenderit
+          </p>
+          <Button component={Link} to="/auth/login">
+            Login now
+          </Button>
+        </>
+      )}
+    </>
+  );
+
   return (
     <div className={classes.container}>
-      <Box component="a" href="/" className={classes.logo}>
+      <Box component={Link} to="/" className={classes.logo}>
         Tech area
       </Box>
       <Box sx={{ flexGrow: 1 }}>
         <Outlet />
       </Box>
       <BackgroundImage src="/e.png" className={classes.sideContainer}>
-        <h2 className={classes.text}>New Here</h2>
-        <p className={classes.text}>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim
-          asperiores fuga atque accusantium dignissimos reprehenderit
-        </p>
-        <Button>Register now</Button>
+        <SideContext />
       </BackgroundImage>
     </div>
   );
