@@ -3,7 +3,9 @@ import {
   Avatar,
   Badge,
   Button,
+  Drawer,
   Flex,
+  Group,
   Stack,
   Text,
   Title,
@@ -11,6 +13,7 @@ import {
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import AnswerCard from "../components/AnswerCard";
+import { useDisclosure } from "@mantine/hooks";
 
 interface Props {
   // Props type definition here
@@ -48,6 +51,7 @@ const useStyles = createStyles((theme) => ({
 
 const QuestionDetails: React.FC<Props> = ({}) => {
   const { classes } = useStyles();
+  const [opened, { close, open }] = useDisclosure();
   return (
     <Stack my="lg" className={classes.text}>
       {/* Question overview */}
@@ -89,11 +93,16 @@ const QuestionDetails: React.FC<Props> = ({}) => {
 
       {/* Answer list */}
       <Stack>
-        <Flex align="center" gap={4}>
-          <Text color="green.6" fz="md" fw="bold">
-            10
-          </Text>
-          Answers
+        <Flex justify="space-between">
+          <Flex align="center" gap={4}>
+            <Text color="green.6" fz="md" fw="bold">
+              10
+            </Text>
+            Answers
+          </Flex>
+          <Button variant="subtle" size="xs" onClick={open}>
+            Give your answer
+          </Button>
         </Flex>
 
         <Accordion variant="filled" radius="lg">
@@ -102,6 +111,18 @@ const QuestionDetails: React.FC<Props> = ({}) => {
           ))}
         </Accordion>
       </Stack>
+
+      {/* Drawer for adding answer */}
+      <Drawer
+        title="Suggest an solution"
+        position="bottom"
+        onClose={close}
+        opened={opened}
+        overlayProps={{ opacity: 0.5, blur: 4 }}
+        size="md"
+      >
+        hello
+      </Drawer>
     </Stack>
   );
 };

@@ -15,7 +15,7 @@ const useStyles = createStyles((theme) => ({
   container: {
     borderRadius: theme.spacing.sm,
     padding: theme.spacing.md,
-    boxShadow: theme.shadows.lg,
+    // boxShadow: theme.shadows.lg,
     backgroundColor:
       theme.colorScheme === "dark"
         ? theme.colors.dark[3]
@@ -111,7 +111,12 @@ const AnswerCard: React.FC<Props> = ({}) => {
 
       <Accordion.Panel className={classes.accordion}>
         <Stack>
-          Comments
+          <Flex justify="end">
+            <Button variant="subtle" size="xs">
+              Comment
+            </Button>
+          </Flex>
+
           {[...Array(3).keys()].map((comment) => (
             <CommentCard />
           ))}
