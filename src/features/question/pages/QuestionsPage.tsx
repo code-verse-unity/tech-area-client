@@ -28,8 +28,7 @@ const QuestionsPage: React.FC<Props> = ({}) => {
               color: theme.colorScheme === "dark" ? "white" : theme.colors.dark,
             }}
           >
-            <Title order={3}>Your questions</Title>
-            <div>Question that you have asked to the community.</div>
+            <Title order={3}>Questions</Title>
           </Box>
         </Grid.Col>
         <Grid.Col span={1}>

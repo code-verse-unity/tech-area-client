@@ -3,6 +3,7 @@ import { MantineThemeOverride } from "@mantine/core";
 export const theme: MantineThemeOverride = {
   primaryColor: "green",
   colors: {
+    // TODO: Search for more cool palette
     dark: [
       "#d5d7e0",
       "#acaebf",

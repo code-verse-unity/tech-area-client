@@ -65,7 +65,7 @@ export default function RootLayout() {
         )}
       </Box>
       <Box sx={{ overflow: "hidden" }}>
-        <Container size="xl">
+        <Container size="xl" px={0}>
           <Grid>
             <Grid.Col span={3} hidden={isMobile}>
               <LeftNavigation />
