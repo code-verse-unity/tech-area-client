@@ -15,6 +15,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { SIDE_TOP_PADDING } from "@/constants/sizes";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -38,13 +39,19 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const data = [
-  { icon: IconGauge, label: "Dashboard", description: "Item with description" },
+  {
+    icon: IconGauge,
+    label: "Profile",
+    description: "Manage your account",
+    url: "/profile",
+  },
   {
     icon: IconFingerprint,
     label: "Security",
     rightSection: <IconChevronRight size="1rem" stroke={1.5} />,
+    url: "/profile",
   },
-  { icon: IconActivity, label: "Activity" },
+  { icon: IconActivity, label: "Activity", url: "/profile" },
 ];
 
 const LeftNavigation = () => {
@@ -52,6 +59,12 @@ const LeftNavigation = () => {
   const { colorScheme } = useMantineTheme();
   const [active, setActive] = useState(0);
 
+  const navigate = useNavigate();
+
+  const handleNavigation = (index: number, url: string) => {
+    setActive(index);
+    navigate(url);
+  };
   const items = data.map((item, index) => (
     <NavLink
       key={item.label}
@@ -60,7 +73,7 @@ const LeftNavigation = () => {
       description={item.description}
       rightSection={item.rightSection}
       icon={<item.icon size="1rem" stroke={1.5} />}
-      onClick={() => setActive(index)}
+      onClick={() => handleNavigation(index, item.url)}
       color={colorScheme === "dark" ? "green.0" : "green.8"}
       variant="subtle"
     />
