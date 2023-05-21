@@ -1,3 +1,4 @@
+import { Question } from "@/utils/types";
 import {
   Avatar,
   Badge,
@@ -43,10 +44,10 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-  // Props type definition here
+  question: Question;
 }
 
-const QuestionCard: React.FC<Props> = ({}) => {
+const QuestionCard: React.FC<Props> = ({ question }) => {
   const { classes } = useStyles();
   return (
     <Grid className={classes.container}>
@@ -58,37 +59,35 @@ const QuestionCard: React.FC<Props> = ({}) => {
       <Grid.Col span={11}>
         <Stack spacing={0}>
           <Flex justify="space-between">
-            <Text className={classes.username}>User name</Text>
+            <Text className={classes.username}> {question.user.fullname}</Text>
             <Text className={classes.time}>2 min ago</Text>
           </Flex>
           <Title order={4}>
             <Link to={"/questions/1"} className={classes.title}>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugit,{" "}
+              {question.title}
             </Link>
           </Title>
-          <p className={classes.text}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-            reiciendis nobis quod fugit maiores, sequi hic doloremque natus
-            repellendus molestiae inventore, rerum eius, alias aspernatur
-            necessitatibus possimus quam perspiciatis eos.
-          </p>
+          <p
+            className={classes.text}
+            dangerouslySetInnerHTML={{
+              __html: question.content,
+            }}
+          ></p>
 
           <Flex sx={{ gap: 4 }}>
-            <Badge component="a" href="/tag" color="green" variant="filled">
-              Badge
-            </Badge>
-            <Badge color="yellow" variant="filled">
-              Badge
-            </Badge>
-            <Badge color="red" variant="filled">
-              Badge
-            </Badge>
-            <Badge color="blue" variant="filled">
-              Badge
-            </Badge>
+            {question.tags.map((tag) => (
+              <Badge
+                component={Link}
+                to={tag.url}
+                color={tag.color}
+                variant="filled"
+              >
+                {tag.name}
+              </Badge>
+            ))}
           </Flex>
           <Text className={classes.text} mt={5}>
-            <b>4</b> answers
+            <b>{question.answers.length}</b> answers
           </Text>
         </Stack>
       </Grid.Col>

@@ -25,9 +25,9 @@ const HomePage = () => {
         <div>Question that you have asked to the community.</div>
       </Box>
       <Stack pt={theme.spacing.md}>
-        {[1, 4].map((i) => (
+        {/* {[1, 4].map((i) => (
           <QuestionCard />
-        ))}
+        ))} */}
       </Stack>
 
       <Divider my={15} />
@@ -43,9 +43,9 @@ const HomePage = () => {
         <div>Suggestion based on your preferences.</div>
       </Box>
       <Stack pt={theme.spacing.md}>
-        {[1, 2, 3, 4].map((i) => (
+        {/* {[1, 2, 3, 4].map((i) => (
           <QuestionCard />
-        ))}
+        ))} */}
       </Stack>
     </Container>
   );

@@ -75,16 +75,16 @@ const ProfilePage: React.FC<Props> = ({}) => {
 
       <Stack mt="lg">
         <Title order={3}>My questions</Title>
-        {[1, 4].map((i) => (
+        {/* {[1, 4].map((i) => (
           <QuestionCard />
-        ))}
+        ))} */}
       </Stack>
 
       <Stack mt="lg">
         <Title order={3}>My challenges</Title>
-        {[1, 4].map((i) => (
+        {/* {[1, 4].map((i) => (
           <QuestionCard />
-        ))}
+        ))} */}
       </Stack>
     </div>
   );

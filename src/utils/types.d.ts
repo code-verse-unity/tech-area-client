@@ -2,11 +2,14 @@ export interface User {
   id: string;
   firstname: string;
   lastname: string;
+  fullname: string;
   email: string;
   password: string;
   role: "admin" | "user";
+  avatarUrl: string;
   createdAt: string;
   updatedAt: string;
+  tags: Tag[];
 }
 
 export interface Question {
@@ -14,7 +17,7 @@ export interface Question {
   user: User;
   title: string;
   content: string;
-  tags: string[];
+  tags: Tag[];
   answers: Answer[];
   createAt: string;
   updateAt: string;
@@ -28,4 +31,11 @@ export interface Answer {
   voteCount: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Tag {
+  id: string;
+  name: string; // React
+  color: string;
+  url: string; // /react
 }
