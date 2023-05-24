@@ -1,4 +1,4 @@
-export let baseURL = "http://localhost:5000";
+export let baseURL = "http://localhost:8001";
 
 if (import.meta.env.PROD) {
   // set the server url when

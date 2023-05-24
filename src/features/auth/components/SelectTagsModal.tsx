@@ -1,6 +1,7 @@
 import { tags } from "@/constants/fakeData";
 import { useAppDispatch } from "@/hooks/redux";
 import { setUser, setUserTags } from "@/redux/reducers/userSlice";
+import { useGetTagsQuery } from "@/services/serverApi";
 import { tagsToMultiselectValues } from "@/utils/tagTransformer";
 import { Tag } from "@/utils/types";
 import {
@@ -40,7 +41,8 @@ const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
   const [loading, setloading] = useState(false);
   const [userTags, setuserTags] = useState<string[]>([]);
 
-  const [data, setData] = useState(tagsToMultiselectValues(tags));
+  const { data = [], isLoading, isError } = useGetTagsQuery();
+  const [values, setValues] = useState(tagsToMultiselectValues(data));
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -80,7 +82,7 @@ const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
         <div>
           <MultiSelect
             label="Before continuing, you have to select at least one tag."
-            data={data}
+            data={values}
             placeholder="Select tags"
             withAsterisk
             searchable

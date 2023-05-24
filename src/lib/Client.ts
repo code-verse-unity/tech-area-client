@@ -1,5 +1,5 @@
-import { baseURL } from "@/constants/baseUrl";
+import { apiV1 } from "@/constants/baseUrl";
 import axios from "axios";
 
-const Client = axios.create({ baseURL });
+const Client = axios.create({ baseURL: apiV1 });
 export default Client;

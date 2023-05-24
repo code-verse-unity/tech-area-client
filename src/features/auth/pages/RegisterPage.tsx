@@ -22,6 +22,8 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import SelectTagsModal from "../components/SelectTagsModal";
 import { useDisclosure } from "@mantine/hooks";
+import { RegisterValues } from "../types";
+import api from "@/services/api";
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -31,13 +33,6 @@ const useStyles = createStyles((theme) => ({
     width: "100%",
   },
 }));
-
-interface FormValues {
-  email: string;
-  password: string;
-  lastname: string;
-  firstname: string;
-}
 
 interface Props {
   // Props type definition here
@@ -54,41 +49,50 @@ const RegisterPage: React.FC<Props> = ({}) => {
   const [loading, setloading] = useState(false);
   const [showTagModal, { open, close }] = useDisclosure(false);
 
-  const form = useForm({
+  const form = useForm<RegisterValues>({
     validate: yupResolver(schema),
     initialValues: {
       email: "",
       password: "",
       lastname: "",
       firstname: "",
+      role: "student",
     },
   });
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const handleSubmit = (values: FormValues) => {
+  const handleSubmit = async (values: RegisterValues) => {
     setloading(true);
 
-    // Add the user data to redux
-    dispatch(
-      setUser({
-        avatarUrl: "",
-        createdAt: "",
-        email: values.email,
-        password: values.password,
-        firstname: values.firstname,
-        lastname: values.lastname,
-        role: "user",
-        fullname: `${values.firstname} ${values.lastname}`,
-        id: "fsdf",
-        updatedAt: "sd",
-        tags: [],
-      })
-    );
+    try {
+      // const res = await api.auth.register(values);
+      // console.log(res);
 
-    setloading(false);
-    open();
-    // navigate("/profile");
+      // Add the user data to redux
+      // dispatch(
+      //   setUser({
+      //     avatarUrl: "",
+      //     createdAt: "",
+      //     email: values.email,
+      //     password: values.password,
+      //     firstname: values.firstname,
+      //     lastname: values.lastname,
+      //     role: "user",
+      //     fullname: `${values.firstname} ${values.lastname}`,
+      //     id: "fsdf",
+      //     updatedAt: "sd",
+      //     tags: [],
+      //   })
+      // );
+
+      open();
+      // navigate("/profile");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setloading(false);
+    }
   };
   return (
     <>

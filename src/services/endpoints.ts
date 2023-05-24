@@ -7,6 +7,7 @@ export const ENDPOINTS = {
   UPDATE_USER: "/users/:id",
   DELETE_USER: "/users/:id",
 
-  // other resources
+  // auth
+  REGISTER_LOCAL: "/auth/register/local",
   // ...
 };
