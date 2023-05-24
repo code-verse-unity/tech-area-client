@@ -9,7 +9,11 @@ export const ENDPOINTS = {
 
   // auth
   REGISTER_LOCAL: "/auth/register/local",
-  // ...
 
+  // question resources
   GET_QUESTIONS: "/questions",
+  GET_QUESTION_TAGS: "/questions/:questionId/tags",
+
+  // tag resources
+  GET_TAGS: "/tags",
 };
