@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import QuestionCard from "../components/QuestionCard";
 import QuestionFilter from "@/features/question/components/QuestionFilter";
+import { useGetQuestionsQuery } from "@/services/serverApi";
 
 interface Props {
   // Props type definition here
@@ -16,6 +17,16 @@ interface Props {
 
 const QuestionsPage: React.FC<Props> = ({}) => {
   const theme = useMantineTheme();
+  const { data = [], isLoading, isError } = useGetQuestionsQuery();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error...</div>;
+  }
+
   return (
     <Container my="md">
       <Grid>
@@ -37,9 +48,11 @@ const QuestionsPage: React.FC<Props> = ({}) => {
       </Grid>
 
       <Stack pt={theme.spacing.md}>
-        {[1, 4].map((i) => (
-          <QuestionCard />
-        ))}
+        {data.length === 0 ? (
+          <div>No questions found</div>
+        ) : (
+          data.map((question) => <QuestionCard question={question} />)
+        )}
       </Stack>
     </Container>
   );

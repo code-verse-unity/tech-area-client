@@ -39,10 +39,8 @@ const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [loading, setloading] = useState(false);
-  const [userTags, setuserTags] = useState<string[]>([]);
 
-  const { data = [], isLoading, isError } = useGetTagsQuery();
-  const [values, setValues] = useState(tagsToMultiselectValues(data));
+  const { data, isLoading, isError } = useGetTagsQuery();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -51,12 +49,12 @@ const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
     initialValues,
   });
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   const handleSubmit = (values: { tags: Tag[] }) => {
     setloading(true);
-
-    console.log(values.tags);
-
-    // dispatch(setUserTags(tags));
 
     setloading(false);
     navigate("/profile");
@@ -82,7 +80,7 @@ const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
         <div>
           <MultiSelect
             label="Before continuing, you have to select at least one tag."
-            data={values}
+            data={tagsToMultiselectValues(data?.data.tags)}
             placeholder="Select tags"
             withAsterisk
             searchable

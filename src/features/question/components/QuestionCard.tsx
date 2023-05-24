@@ -1,4 +1,4 @@
-import { Question } from "@/utils/types";
+import { Question } from "@/services/types";
 import {
   Avatar,
   Badge,
@@ -13,6 +13,7 @@ import {
   createStyles,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
+import dayjs from "@/utils/dayjs";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -53,17 +54,19 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
     <Grid className={classes.container}>
       <Grid.Col span={1}>
         <Center>
-          <Avatar size="md" radius="xl" />
+          <Avatar size="md" radius="xl" src={question.user.imageUrl} />
         </Center>
       </Grid.Col>
       <Grid.Col span={11}>
         <Stack spacing={0}>
           <Flex justify="space-between">
-            <Text className={classes.username}> {question.user.fullname}</Text>
-            <Text className={classes.time}>2 min ago</Text>
+            <Text className={classes.username}> {question.user.name.full}</Text>
+            <Text className={classes.time}>
+              {dayjs(question.createdAt).fromNow()}
+            </Text>
           </Flex>
           <Title order={4}>
-            <Link to={"/questions/1"} className={classes.title}>
+            <Link to={`/questions/${question.id}`} className={classes.title}>
               {question.title}
             </Link>
           </Title>
@@ -78,8 +81,8 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
             {question.tags.map((tag) => (
               <Badge
                 component={Link}
-                to={tag.url}
-                color={tag.color}
+                to={"#"}
+                color={tag.bgColor}
                 variant="filled"
               >
                 {tag.name}

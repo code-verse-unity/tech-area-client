@@ -10,4 +10,6 @@ export const ENDPOINTS = {
   // auth
   REGISTER_LOCAL: "/auth/register/local",
   // ...
+
+  GET_QUESTIONS: "/questions",
 };
