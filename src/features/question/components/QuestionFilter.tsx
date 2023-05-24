@@ -1,3 +1,4 @@
+import { useGetTagsQuery } from "@/services/serverApi";
 import {
   Tooltip,
   ActionIcon,
@@ -12,27 +13,45 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconAdjustmentsHorizontal, IconFilter } from "@tabler/icons-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface Props {
-  // Props type definition here
+  orderDirection: string;
+  setorderDirection: Dispatch<SetStateAction<string>>;
+  settags: Dispatch<SetStateAction<string[]>>;
 }
 
-const QuestionFilter: React.FC<Props> = ({}) => {
+const QuestionFilter: React.FC<Props> = ({
+  orderDirection = "asc",
+  setorderDirection,
+  settags,
+}) => {
   const [opened, { open, close }] = useDisclosure(false);
   const theme = useMantineTheme();
 
-  const [date, setdate] = useState("all");
-  const [tags, settags] = useState([
-    "laravel",
-    "vue",
-    "angular",
-    "react",
-    "node",
-  ]);
-  const [difficulty, setdifficulty] = useState("all");
   const isMobile = useMediaQuery("(max-width: 500px)");
 
+  const { data = [], isLoading, isError } = useGetTagsQuery();
+
+  /**
+   * Local state for the filter (orderDirection)
+   */
+  const [localOrderDirection, setlocalOrderDirection] =
+    useState<string>(orderDirection);
+  /**
+   * Local state for the filter (tags)
+   */
+  const [locatags, setlocatags] = useState<string[]>([]);
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (isError) return <div>Error</div>;
+
+  const handleApplyFilter = () => {
+    setorderDirection(localOrderDirection);
+    settags(locatags);
+    close();
+  };
   return (
     <>
       <Tooltip label="Filter">
@@ -62,27 +81,30 @@ const QuestionFilter: React.FC<Props> = ({}) => {
         fullScreen={isMobile}
       >
         <Stack>
-          <Chip.Group multiple={false} value={date} onChange={setdate}>
+          <Chip.Group
+            multiple={false}
+            value={localOrderDirection}
+            onChange={setlocalOrderDirection}
+          >
             <Text fw="bold">Date</Text>
             <Group>
-              <Chip value="all">All</Chip>
-              <Chip value="recent">Most Recent</Chip>
-              <Chip value="old">Oldest</Chip>
+              <Chip value="asc">Most Recent</Chip>
+              <Chip value="desc">Oldest</Chip>
             </Group>
           </Chip.Group>
 
-          <Chip.Group multiple={true} value={tags} onChange={settags}>
+          <Chip.Group multiple={true} value={locatags} onChange={setlocatags}>
             <Text fw="bold">Tags</Text>
             <Group>
-              <Chip value="laravel">Laravel</Chip>
-              <Chip value="vue">Most Recent</Chip>
-              <Chip value="angular">Oldest</Chip>
-              <Chip value="react">Most Recent</Chip>
-              <Chip value="node">Node</Chip>
+              {data.map((tag) => (
+                <Chip key={tag.id} value={`${tag.id}`}>
+                  {tag.name}
+                </Chip>
+              ))}
             </Group>
           </Chip.Group>
 
-          <Chip.Group
+          {/* <Chip.Group
             multiple={false}
             value={difficulty}
             onChange={setdifficulty}
@@ -94,10 +116,10 @@ const QuestionFilter: React.FC<Props> = ({}) => {
               <Chip value="medium">Medium</Chip>
               <Chip value="difficult">Difficult</Chip>
             </Group>
-          </Chip.Group>
+          </Chip.Group> */}
 
           <Box my="md">
-            <Button radius="lg" size="xs" fullWidth>
+            <Button radius="lg" size="xs" fullWidth onClick={handleApplyFilter}>
               Apply filter
             </Button>
           </Box>

@@ -1,3 +1,5 @@
+import { Tag } from "@/utils/types";
+
 export interface ServerResponse {
   data: any;
   path: string;
@@ -16,7 +18,6 @@ export interface QuestionsResponse extends ServerResponse {
     questions: Question[];
   };
 }
-
 export interface Question {
   id: number;
   title: string;
@@ -26,13 +27,6 @@ export interface Question {
   tags: Tag[];
   user: User;
   answers: Answer[];
-}
-
-export interface Tag {
-  id: number;
-  name: string;
-  bgColor: string;
-  textColor: string;
 }
 
 export interface RegisterResponse {

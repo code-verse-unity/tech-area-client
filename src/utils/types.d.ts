@@ -32,10 +32,9 @@ export interface Answer {
   createdAt: string;
   updatedAt: string;
 }
-
 export interface Tag {
-  id: string;
-  name: string; // React
-  color: string;
-  url: string; // /react
+  id: number;
+  name: string;
+  bgColor: string;
+  textColor: string;
 }
