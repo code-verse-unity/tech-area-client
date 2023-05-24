@@ -14,6 +14,7 @@ import {
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import dayjs from "@/utils/dayjs";
+import { useGetQuestionTagsQuery } from "@/services/serverApi";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -50,6 +51,19 @@ interface Props {
 
 const QuestionCard: React.FC<Props> = ({ question }) => {
   const { classes } = useStyles();
+
+  const {
+    data = [],
+    isLoading,
+    isError,
+  } = useGetQuestionTagsQuery({
+    questionId: question.id,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (isError) return <div>Error</div>;
+
   return (
     <Grid className={classes.container}>
       <Grid.Col span={1}>
@@ -78,7 +92,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
           ></p>
 
           <Flex sx={{ gap: 4 }}>
-            {question.tags.map((tag) => (
+            {data.map((tag) => (
               <Badge
                 component={Link}
                 to={"#"}
