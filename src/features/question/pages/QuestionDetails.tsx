@@ -11,13 +11,11 @@ import {
   Title,
   createStyles,
 } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AnswerCard from "../components/AnswerCard";
 import { useDisclosure } from "@mantine/hooks";
-
-interface Props {
-  // Props type definition here
-}
+import { useGetOneQuestionQuery } from "@/services/serverApi";
+import dayjs from "@/utils/dayjs";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -49,82 +47,101 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const QuestionDetails: React.FC<Props> = ({}) => {
+const QuestionDetails = () => {
   const { classes } = useStyles();
   const [opened, { close, open }] = useDisclosure();
-  return (
-    <Stack my="lg" className={classes.text}>
-      {/* Question overview */}
-      <div className={classes.container}>
-        <h2 className={classes.title}>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem,
-          nulla ?
-        </h2>
-        <p className={classes.text}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-          nulla officia, harum dolorem corrupti fuga sint perferendis velit
-          assumenda amet maxime itaque debitis cupiditate, possimus labore. Iure
-          ad quibusdam itaque.
-        </p>
-        <Flex justify="space-between">
-          <Flex className={classes.text} align="center" gap={4}>
-            <Avatar radius="xl" />
-            <Link to="#">John Doe</Link>
-          </Flex>
-          <Flex className={classes.text} align="center">
-            <span className={classes.time}>10 days ago</span>
-          </Flex>
-        </Flex>
 
-        <Flex gap="sm" mt={10}>
-          {[...Array(4).keys()].map((i) => (
-            <Badge
-              component={Link}
-              to="/tag"
-              color="green"
-              variant="filled"
-              sx={{ cursor: "pointer" }}
-            >
-              Badge
-            </Badge>
-          ))}
-        </Flex>
-      </div>
+  /**
+   * Get the information of the question specified in params
+   */
+  const { questionId = "" } = useParams<{ questionId: string }>();
+  const { data, isLoading, isError, isSuccess } = useGetOneQuestionQuery({
+    questionId,
+  });
 
-      {/* Answer list */}
-      <Stack>
-        <Flex justify="space-between">
-          <Flex align="center" gap={4}>
-            <Text color="green.6" fz="md" fw="bold">
-              10
-            </Text>
-            Answers
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error...</div>;
+  }
+
+  if (isSuccess) {
+    return (
+      <Stack my="lg" className={classes.text}>
+        {/* Question overview */}
+        <div className={classes.container}>
+          <h2 className={classes.title}>{data.title}</h2>
+          <p
+            className={classes.text}
+            dangerouslySetInnerHTML={{
+              __html: data.content,
+            }}
+          ></p>
+          <Flex justify="space-between">
+            <Flex className={classes.text} align="center" gap={4}>
+              <Avatar radius="xl" src={data.user.imageUrl} />
+              <Link to="#">{data.user.name.full}</Link>
+            </Flex>
+            <Flex className={classes.text} align="center">
+              <span className={classes.time}>
+                {dayjs(data.createdAt).fromNow()}
+              </span>
+            </Flex>
           </Flex>
-          <Button variant="subtle" size="xs" onClick={open}>
-            Give your answer
-          </Button>
-        </Flex>
 
-        <Accordion variant="filled" radius="lg">
-          {[...Array(4).keys()].map((answer) => (
-            <AnswerCard />
-          ))}
-        </Accordion>
+          <Flex gap="sm" mt={10}>
+            {data.tags.map((tag) => (
+              <Badge
+                key={tag.id}
+                // component={Link}
+                // to="/tag"
+                color={tag.bgColor}
+                variant="filled"
+                sx={{ cursor: "pointer" }}
+              >
+                {tag.name}
+              </Badge>
+            ))}
+          </Flex>
+        </div>
+
+        {/* Answer list */}
+        <Stack>
+          <Flex justify="space-between">
+            <Flex align="center" gap={4}>
+              <Text color="green.6" fz="md" fw="bold">
+                {data.answers.length}
+              </Text>
+              Answers
+            </Flex>
+            <Button variant="subtle" size="xs" onClick={open}>
+              Give your answer
+            </Button>
+          </Flex>
+
+          <Accordion variant="filled" radius="lg">
+            {data.answers.map((answer) => (
+              <AnswerCard answerId={answer.id} />
+            ))}
+          </Accordion>
+        </Stack>
+
+        {/* Drawer for adding answer */}
+        <Drawer
+          title="Suggest an solution"
+          position="bottom"
+          onClose={close}
+          opened={opened}
+          overlayProps={{ opacity: 0.5, blur: 4 }}
+          size="md"
+        >
+          hello
+        </Drawer>
       </Stack>
-
-      {/* Drawer for adding answer */}
-      <Drawer
-        title="Suggest an solution"
-        position="bottom"
-        onClose={close}
-        opened={opened}
-        overlayProps={{ opacity: 0.5, blur: 4 }}
-        size="md"
-      >
-        hello
-      </Drawer>
-    </Stack>
-  );
+    );
+  }
 };
 
 export default QuestionDetails;

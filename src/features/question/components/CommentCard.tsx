@@ -1,5 +1,7 @@
+import { Comment } from "@/services/types";
 import { Avatar, Flex, createStyles } from "@mantine/core";
 import { Link } from "react-router-dom";
+import dayjs from "@/utils/dayjs";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -31,27 +33,29 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-  // Props type definition here
+  comment: Comment;
 }
 
-const CommentCard: React.FC<Props> = ({}) => {
+const CommentCard: React.FC<Props> = ({ comment }) => {
   const { classes } = useStyles();
   return (
     <div className={classes.container}>
       <Flex justify="space-between" mb={10}>
         <Flex className={classes.text} align="start" gap={10}>
-          <Avatar radius="xl" />
-          <Link to="#">John Doe</Link>
+          <Avatar radius="xl" src={comment.user.imageUrl} />
+          <Link to="#">{comment.user.name.full}</Link>
         </Flex>
         <Flex className={classes.text} align="start" pr={4}>
-          <span className={classes.time}>10 days ago</span>
+          <span className={classes.time}>
+            {dayjs(comment.createdAt).fromNow()}
+          </span>
         </Flex>
       </Flex>
-      <div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis illo
-        vel dolorum eligendi cum. Ad, blanditiis! Qui veniam similique excepturi
-        quasi autem culpa earum dolorum ex sed incidunt, asperiores aliquid?
-      </div>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: comment.content,
+        }}
+      ></div>
     </div>
   );
 };
