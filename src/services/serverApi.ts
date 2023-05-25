@@ -1,17 +1,20 @@
 import { Tag } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Question, QuestionsResponse, TagsResponse } from "./types";
+import {
+  Answer,
+  OneAnswerResponse,
+  OneQuestionResponse,
+  Question,
+  QuestionsResponse,
+  TagsResponse,
+} from "./types";
 import { ENDPOINTS } from "./endpoints";
-
-interface GetQuestionsQueryParams {
-  orderDirection?: string; // asc | desc
-  page?: number;
-  tags?: string;
-}
-
-interface GetQuestionTagsQueryParams {
-  questionId: number;
-}
+import {
+  GetOneAnswerQueryParams,
+  GetOneQuestionQueryParams,
+  GetQuestionTagsQueryParams,
+  GetQuestionsQueryParams,
+} from "./queryParams";
 
 export const serverApi = createApi({
   reducerPath: "serverApi",
@@ -54,6 +57,31 @@ export const serverApi = createApi({
         return response.data.tags;
       },
     }),
+
+    /**
+     * @description Get One Question
+     */
+    // TODO: invalidate this when new answers or new comments or new votes
+    getOneQuestion: builder.query<Question, GetOneQuestionQueryParams>({
+      query: ({ questionId }) =>
+        ENDPOINTS.GET_ONE_QUESTION.replace(":questionId", `${questionId}`),
+
+      transformResponse: (response: OneQuestionResponse) => {
+        return response.data.question;
+      },
+    }),
+
+    /**
+     * @description Get One Answer
+     */
+    getOneAnswer: builder.query<Answer, GetOneAnswerQueryParams>({
+      query: ({ answerId }) =>
+        ENDPOINTS.GET_ONE_ANSWER.replace(":answerId", `${answerId}`),
+
+      transformResponse: (response: OneAnswerResponse) => {
+        return response.data.answer;
+      },
+    }),
   }),
 });
 
@@ -61,4 +89,6 @@ export const {
   useGetTagsQuery,
   useGetQuestionsQuery,
   useGetQuestionTagsQuery,
+  useGetOneQuestionQuery,
+  useGetOneAnswerQuery,
 } = serverApi;

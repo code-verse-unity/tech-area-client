@@ -12,8 +12,12 @@ export const ENDPOINTS = {
 
   // question resources
   GET_QUESTIONS: "/questions",
+  GET_ONE_QUESTION: "/questions/:questionId",
   GET_QUESTION_TAGS: "/questions/:questionId/tags",
 
   // tag resources
   GET_TAGS: "/tags",
+
+  // answer resources
+  GET_ONE_ANSWER: "/answers/:answerId",
 };

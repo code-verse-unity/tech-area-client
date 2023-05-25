@@ -18,6 +18,18 @@ export interface QuestionsResponse extends ServerResponse {
     questions: Question[];
   };
 }
+
+export interface OneQuestionResponse extends ServerResponse {
+  data: {
+    question: Question;
+  };
+}
+
+export interface OneAnswerResponse extends ServerResponse {
+  data: {
+    answer: Answer;
+  };
+}
 export interface Question {
   id: number;
   title: string;
@@ -62,4 +74,33 @@ export interface Name {
   first: string;
   last: string;
   full: string;
+}
+
+export interface Answer {
+  id: number;
+  userId: string;
+  questionId: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
+  votes: Vote[];
+  comments: Comment[];
+}
+
+export interface Vote {
+  id: number;
+  answerId: number;
+  userId: number;
+  type: "up" | "down";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Comment {
+  id: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
 }
