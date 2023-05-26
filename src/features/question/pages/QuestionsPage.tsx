@@ -12,6 +12,7 @@ import QuestionFilter from "@/features/question/components/QuestionFilter";
 import { useGetQuestionsQuery } from "@/services/serverApi";
 import { useState } from "react";
 import { transformTagIds } from "@/utils/tranformers";
+import { useAuth } from "@/features/auth";
 
 interface Props {
   // Props type definition here
@@ -20,7 +21,6 @@ interface Props {
 const QuestionsPage: React.FC<Props> = ({}) => {
   const theme = useMantineTheme();
   const [orderDirection, setorderDirection] = useState<string>("asc");
-  console.log(orderDirection);
 
   const [page, setpage] = useState(1);
   const [tags, settags] = useState<string[]>([]);

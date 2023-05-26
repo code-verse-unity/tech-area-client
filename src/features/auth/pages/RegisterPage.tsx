@@ -24,6 +24,10 @@ import SelectTagsModal from "../components/SelectTagsModal";
 import { useDisclosure } from "@mantine/hooks";
 import { RegisterValues } from "../types";
 import api from "@/services/api";
+import { setToken } from "@/utils/token";
+import { useCreateUserMutation } from "@/services/serverApi";
+import { setAuth } from "@/redux/reducers/authSlice";
+import { User } from "@/services/types";
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -46,8 +50,12 @@ const schema = Yup.object().shape({
 
 const RegisterPage: React.FC<Props> = ({}) => {
   const { classes } = useStyles();
-  const [loading, setloading] = useState(false);
   const [showTagModal, { open, close }] = useDisclosure(false);
+
+  /**
+   * Handle Registration
+   */
+  const [createUser, { isLoading }] = useCreateUserMutation();
 
   const form = useForm<RegisterValues>({
     validate: yupResolver(schema),
@@ -56,44 +64,35 @@ const RegisterPage: React.FC<Props> = ({}) => {
       password: "",
       lastname: "",
       firstname: "",
-      role: "student",
+      role: "user",
     },
   });
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleSubmit = async (values: RegisterValues) => {
-    setloading(true);
+    const isUser = (value: any): value is { data: User } => {
+      return value.data !== undefined;
+    };
 
-    try {
-      // const res = await api.auth.register(values);
-      // console.log(res);
+    createUser(values).then((response) => {
+      if (isUser(response)) {
+        dispatch(setUser(response.data));
+        dispatch(setAuth(true));
 
-      // Add the user data to redux
-      // dispatch(
-      //   setUser({
-      //     avatarUrl: "",
-      //     createdAt: "",
-      //     email: values.email,
-      //     password: values.password,
-      //     firstname: values.firstname,
-      //     lastname: values.lastname,
-      //     role: "user",
-      //     fullname: `${values.firstname} ${values.lastname}`,
-      //     id: "fsdf",
-      //     updatedAt: "sd",
-      //     tags: [],
-      //   })
-      // );
-
-      open();
-      // navigate("/profile");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setloading(false);
-    }
+        navigate("/profile");
+      } else {
+        /**
+         * Check if the email is already used
+         */
+        // @ts-ignore
+        if (response.error?.status === 409) {
+          form.setErrors({ email: "User with same email already exists" });
+        }
+      }
+    });
   };
+
   return (
     <>
       <Center h="100%">
@@ -122,34 +121,34 @@ const RegisterPage: React.FC<Props> = ({}) => {
           <form onSubmit={form.onSubmit(handleSubmit)} className={classes.form}>
             <TextInput
               w="100%"
-              disabled={loading}
+              disabled={isLoading}
               placeholder="John"
               autoComplete="off"
               {...form.getInputProps("firstname")}
             />
             <TextInput
               w="100%"
-              disabled={loading}
+              disabled={isLoading}
               placeholder="Doe"
               autoComplete="off"
               {...form.getInputProps("lastname")}
             />
             <TextInput
               w="100%"
-              disabled={loading}
+              disabled={isLoading}
               placeholder="example@mail.com"
               autoComplete="off"
               {...form.getInputProps("email")}
             />
             <PasswordInput
               w="100%"
-              disabled={loading}
+              disabled={isLoading}
               autoComplete="new-password"
               placeholder="***********"
               {...form.getInputProps("password")}
             />
             <Center w="100%">
-              <Button fullWidth loading={loading} type="submit">
+              <Button fullWidth loading={isLoading} type="submit">
                 Register
               </Button>
             </Center>

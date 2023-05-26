@@ -1,3 +1,5 @@
+import { useAppSelector } from "@/hooks/redux";
+import { selectAuth } from "@/redux/selectors/authSelector";
 import {
   createStyles,
   Header,
@@ -144,6 +146,8 @@ export default function Navigation() {
   const { toggleColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
 
+  const isAuthenticated = useAppSelector(selectAuth);
+
   const links = mockdata.map((item) => (
     <UnstyledButton
       className={classes.subLink}
@@ -267,12 +271,18 @@ export default function Navigation() {
                   />
                 }
               />
-              <Button variant="default" component={Link} to="/auth/login">
-                Log in
-              </Button>
-              <Button component={Link} to="/auth/register">
-                Sign up
-              </Button>
+              {isAuthenticated ? (
+                <div>user</div>
+              ) : (
+                <>
+                  <Button variant="default" component={Link} to="/auth/login">
+                    Log in
+                  </Button>
+                  <Button component={Link} to="/auth/register">
+                    Sign up
+                  </Button>
+                </>
+              )}
             </Group>
             <Burger
               opened={drawerOpened}

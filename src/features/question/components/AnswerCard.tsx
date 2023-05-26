@@ -18,6 +18,7 @@ import {
   IconArrowBadgeDownFilled,
   IconArrowBadgeUpFilled,
 } from "@tabler/icons-react";
+import { useAuth } from "@/features/auth";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -59,6 +60,7 @@ const AnswerCard: React.FC<Props> = ({ answerId }) => {
   const { classes } = useStyles();
   const [approved, toggle] = useToggle([false, true]);
   const theme = useColorScheme();
+  // const auth = useAuth();
 
   const { data, isLoading, isError, isSuccess } = useGetOneAnswerQuery({
     answerId: `${answerId}`,
@@ -148,9 +150,13 @@ const AnswerCard: React.FC<Props> = ({ answerId }) => {
         <Accordion.Panel className={classes.accordion}>
           <Stack>
             <Flex justify="end">
+              {/* {auth.authenticated ? ( */}
               <Button variant="subtle" size="xs">
                 Comment
               </Button>
+              {/* ) : ( */}
+              {/* <div>You must have an account to comment.</div> */}
+              {/* )} */}
             </Flex>
 
             {data.comments.map((comment) => (

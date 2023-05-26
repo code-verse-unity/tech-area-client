@@ -2,14 +2,23 @@ import { Route, Routes as ReactRoutes, useLocation } from "react-router-dom";
 import RootLayout from "@/layouts/RootLayout";
 import HomePage from "@/features/question/pages/HomePage";
 import QuestionsPage from "@/features/question/pages/QuestionsPage";
-import { RegisterPage, LoginPage } from "@/features/auth";
+import { RegisterPage, LoginPage, useAuth } from "@/features/auth";
 import AuthLayout from "@/layouts/AuthLayout";
 import QuestionDetails from "@/features/question/pages/QuestionDetails";
 import ProfilePage from "@/features/profile/pages/ProfilePage";
+import { useAppDispatch } from "@/hooks/redux";
+import { setAuth } from "@/redux/reducers/authSlice";
+import { setUser } from "@/redux/reducers/userSlice";
 
 const Routes = () => {
   const location = useLocation();
+  const auth = useAuth();
 
+  const dispatch = useAppDispatch();
+  if (!auth.isLoading && auth.user) {
+    dispatch(setAuth(true));
+    dispatch(setUser(auth.user));
+  }
   return (
     <ReactRoutes location={location} key={location.key}>
       <Route path="/" element={<RootLayout />}>

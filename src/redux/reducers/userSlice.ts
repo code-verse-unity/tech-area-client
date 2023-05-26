@@ -1,14 +1,18 @@
-import { Tag, User } from "@/utils/types";
+import { User } from "@/services/types";
+import { Tag } from "@/utils/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: User = {
-  id: "",
-  firstname: "",
-  lastname: "",
-  fullname: "",
+  id: 0,
+  name: {
+    first: "",
+    last: "",
+    full: "",
+  },
   email: "",
-  avatarUrl: "",
-  password: "",
+  gender: null,
+  level: null,
+  imageUrl: "",
   role: "user",
   createdAt: "",
   updatedAt: "",

@@ -16,6 +16,9 @@ import AnswerCard from "../components/AnswerCard";
 import { useDisclosure } from "@mantine/hooks";
 import { useGetOneQuestionQuery } from "@/services/serverApi";
 import dayjs from "@/utils/dayjs";
+import { useAuth } from "@/features/auth";
+import { useAppSelector } from "@/hooks/redux";
+import { selectAuth } from "@/redux/selectors/authSelector";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -50,6 +53,7 @@ const useStyles = createStyles((theme) => ({
 const QuestionDetails = () => {
   const { classes } = useStyles();
   const [opened, { close, open }] = useDisclosure();
+  const isAuthenticated = useAppSelector(selectAuth);
 
   /**
    * Get the information of the question specified in params
@@ -116,9 +120,15 @@ const QuestionDetails = () => {
               </Text>
               Answers
             </Flex>
-            <Button variant="subtle" size="xs" onClick={open}>
-              Give your answer
-            </Button>
+
+            {/* Create an answer only if the user is authenticated */}
+            {isAuthenticated ? (
+              <Button variant="subtle" size="xs" onClick={open}>
+                Give your answer
+              </Button>
+            ) : (
+              <div>You must have an account to give an answer.</div>
+            )}
           </Flex>
 
           <Accordion variant="filled" radius="lg">
@@ -141,6 +151,8 @@ const QuestionDetails = () => {
         </Drawer>
       </Stack>
     );
+  } else {
+    return null;
   }
 };
 

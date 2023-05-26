@@ -6,7 +6,10 @@ import {
   OneQuestionResponse,
   Question,
   QuestionsResponse,
+  RegisterResponse,
   TagsResponse,
+  User,
+  WhoAmIResponse,
 } from "./types";
 import { ENDPOINTS } from "./endpoints";
 import {
@@ -15,11 +18,13 @@ import {
   GetQuestionTagsQueryParams,
   GetQuestionsQueryParams,
 } from "./queryParams";
+import { getToken, setToken } from "@/utils/token";
+import { RegisterValues } from "@/features/auth/types";
 
 export const serverApi = createApi({
   reducerPath: "serverApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8001/api/v1" }),
-  tagTypes: ["Tags", "Questions"],
+  tagTypes: ["Tags", "Questions", "Auth"],
   endpoints: (builder) => ({
     /**
      * @description Get all tags
@@ -82,13 +87,58 @@ export const serverApi = createApi({
         return response.data.answer;
       },
     }),
+
+    /**
+     * @description Get Who I am
+     */
+    getWhoAmI: builder.query<User, void>({
+      query: () => {
+        return {
+          url: ENDPOINTS.WHO_AM_I,
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+        };
+      },
+      transformResponse: (response: WhoAmIResponse) => {
+        return response.data.user;
+      },
+      providesTags: ["Auth"],
+    }),
+
+    /**
+     * @description Registration
+     */
+    createUser: builder.mutation<User, RegisterValues>({
+      query: (body) => {
+        return {
+          url: ENDPOINTS.REGISTER_LOCAL,
+          method: "post",
+          body,
+        };
+      },
+      transformResponse: (response: RegisterResponse) => {
+        /**
+         * Set the token to the localStorage
+         */
+        setToken(response.data.tokens.accessToken);
+
+        return response.data.user;
+      },
+      invalidatesTags: ["Auth"],
+    }),
   }),
 });
 
 export const {
+  // Get
   useGetTagsQuery,
   useGetQuestionsQuery,
   useGetQuestionTagsQuery,
   useGetOneQuestionQuery,
   useGetOneAnswerQuery,
+  useGetWhoAmIQuery,
+
+  // Post
+  useCreateUserMutation,
 } = serverApi;

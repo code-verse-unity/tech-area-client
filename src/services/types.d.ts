@@ -30,6 +30,12 @@ export interface OneAnswerResponse extends ServerResponse {
     answer: Answer;
   };
 }
+
+export interface WhoAmIResponse extends ServerResponse {
+  data: {
+    user: User;
+  };
+}
 export interface Question {
   id: number;
   title: string;

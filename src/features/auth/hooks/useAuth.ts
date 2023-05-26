@@ -1,16 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useGetWhoAmIQuery } from "@/services/serverApi";
 
 const useAuth = () => {
-  const [authentified, setauthentified] = useState(false);
-  const [user, setuser] = useState(null);
+  const { data, isLoading, isError, error } = useGetWhoAmIQuery();
 
-  // const { } = useQuery({
-  //   queryKey: ['authenticate'],
-  //   queryFn : () =>
-  // })
-
-  return { authentified, user };
+  return {
+    authenticated: data !== undefined && !isLoading,
+    user: data,
+    isLoading,
+    isError,
+    error,
+  };
 };
 
 export default useAuth;
