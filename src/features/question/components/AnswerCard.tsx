@@ -1,7 +1,9 @@
 import {
   Accordion,
+  ActionIcon,
   Avatar,
   Button,
+  Divider,
   Flex,
   Stack,
   Text,
@@ -12,6 +14,10 @@ import { Link } from "react-router-dom";
 import CommentCard from "./CommentCard";
 import { useGetOneAnswerQuery } from "@/services/serverApi";
 import dayjs from "@/utils/dayjs";
+import {
+  IconArrowBadgeDownFilled,
+  IconArrowBadgeUpFilled,
+} from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -78,66 +84,66 @@ const AnswerCard: React.FC<Props> = ({ answerId }) => {
         mb="md"
         className={classes.accordion}
       >
-        <div className={classes.container}>
-          {/* Heading */}
-          <Flex justify="space-between">
-            <Flex align="center" gap={4}>
-              <Text color="green.6" fz="md" fw="bold">
-                {upCount}
-              </Text>
-              <b>Up</b>
-              <Text color="green.6" fz="md" fw="bold">
-                {downCount}
-              </Text>
-              <b>Down</b>
-            </Flex>
-            <Flex align="center">
-              <Button
-                color="indigo"
-                radius="xl"
-                variant="filled"
-                onClick={() => toggle()}
-                size="xs"
-              >
-                {approved ? "Approved" : "Approve"}
-              </Button>
-            </Flex>
+        <Flex className={classes.container}>
+          {/* Votes count and actions */}
+          <Flex
+            align="center"
+            justify="center"
+            direction="column"
+            w="3rem"
+            mr="sm"
+          >
+            <ActionIcon radius="xl" color="blue">
+              <IconArrowBadgeUpFilled />
+            </ActionIcon>
+            <Text color="blue.6" fz="xl" fw="bold">
+              {upCount}
+            </Text>
+            <Divider color="green.2" w="60%" />
+            <Text color="red.6" fz="xl" fw="bold">
+              {downCount}
+            </Text>
+            <ActionIcon radius="xl" color="red">
+              <IconArrowBadgeDownFilled />
+            </ActionIcon>
           </Flex>
 
-          {/* Content */}
-          <p
-            dangerouslySetInnerHTML={{
-              __html: data.content,
-            }}
-          ></p>
+          <div>
+            {/* Content */}
+            <p
+              dangerouslySetInnerHTML={{
+                __html: data.content,
+              }}
+            ></p>
 
-          {/* User */}
-          <Flex justify="space-between">
-            <Flex className={classes.text} align="center" gap={4}>
-              By
-              <Link to="#">{data.user.name.full}</Link>
+            {/* User */}
+            <Flex justify="space-between">
+              <Flex className={classes.text} align="center" gap={4}>
+                By
+                <Link to="#">{data.user.name.full}</Link>
+              </Flex>
+              <Flex className={classes.text} align="center" pr={4}>
+                <span className={classes.time}>
+                  {dayjs(data.createdAt).fromNow()}
+                </span>
+              </Flex>
             </Flex>
-            <Flex className={classes.text} align="center" pr={4}>
-              <span className={classes.time}>
-                {dayjs(data.createdAt).fromNow()}
-              </span>
-            </Flex>
-          </Flex>
 
-          {/* Comments */}
-          <Flex justify="space-between" mt={4}>
-            <Flex align="center" gap={4}>
-              <Text fz="sm" fw="bold">
-                {data.comments.length} Comments
-              </Text>
+            {/* Comments */}
+            <Flex justify="space-between" mt={4}>
+              <Flex align="center" gap={4}>
+                <Text fz="sm" fw="bold">
+                  {data.comments.length} Comments
+                </Text>
+              </Flex>
+              <Flex className={classes.text} align="center">
+                <Accordion.Control bg="#fff0">
+                  <Text fz="sm">Show comments</Text>
+                </Accordion.Control>
+              </Flex>
             </Flex>
-            <Flex className={classes.text} align="center">
-              <Accordion.Control bg="#fff0">
-                <Text fz="sm">Show comments</Text>
-              </Accordion.Control>
-            </Flex>
-          </Flex>
-        </div>
+          </div>
+        </Flex>
 
         <Accordion.Panel className={classes.accordion}>
           <Stack>
