@@ -17,6 +17,13 @@ import {
 import { useForm, yupResolver } from "@mantine/form";
 import { useState } from "react";
 import * as Yup from "yup";
+import { LoginValues } from "../types";
+import { useLogUserMutation } from "@/services/serverApi";
+import { isUser } from "@/utils/typeGuards";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "@/hooks/redux";
+import { setAuth } from "@/redux/reducers/authSlice";
+import { setUser } from "@/redux/reducers/userSlice";
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -27,34 +34,48 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface Props {
-  // Props type definition here
-}
-
 const schema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().min(8, "Your password must a least 8 characters"),
 });
 
-const LoginPage: React.FC<Props> = ({}) => {
+const initialValues: LoginValues = {
+  email: "",
+  password: "",
+};
+
+const LoginPage = () => {
   const { classes } = useStyles();
-  const [loading, setloading] = useState(false);
 
   const form = useForm({
     validate: yupResolver(schema),
-    initialValues: {
-      email: "",
-      password: "",
-    },
+    initialValues,
   });
 
-  const handleSubmit = () => {
-    setloading(true);
+  const [logUser, { isLoading }] = useLogUserMutation();
 
-    setTimeout(() => {
-      setloading(false);
-    }, 1000);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (values: LoginValues) => {
+    const response = await logUser(values);
+
+    if (isUser(response)) {
+      dispatch(setUser(response.data));
+      dispatch(setAuth(true));
+
+      navigate("/profile");
+    } else {
+      // @ts-ignore
+      if (response.error?.status === 401) {
+        const errors = { email: "", password: "" };
+        form.setErrors(errors);
+      }
+    }
   };
+
+  console.log(form.errors);
+
   return (
     <Center h="100%">
       <Stack align="center">
@@ -79,23 +100,35 @@ const LoginPage: React.FC<Props> = ({}) => {
           <Divider h={10} w="150px" color="green" />
         </Flex>
 
-        <form
-          onSubmit={form.onSubmit((values) => handleSubmit())}
-          className={classes.form}
-        >
+        <form onSubmit={form.onSubmit(handleSubmit)} className={classes.form}>
+          {form.errors?.email === "" && form.errors?.password === "" && (
+            <Text color="red" fz="sm">
+              Your email or password is incorrect. Please try again.
+            </Text>
+          )}
           <TextInput
             w="100%"
-            disabled={loading}
+            disabled={isLoading}
             placeholder="example@mail.com"
             {...form.getInputProps("email")}
+            /**
+             * Allow to give a feed back when the user credential
+             * doesn't match the records in the db
+             */
+            error={form.errors?.email === ""}
           />
           <PasswordInput
             w="100%"
-            disabled={loading}
+            disabled={isLoading}
             {...form.getInputProps("password")}
+            /**
+             * Allow to give a feed back when the user credential
+             * doesn't match the records in the db
+             */
+            error={form.errors?.password === ""}
           />
           <Center w="100%">
-            <Button fullWidth loading={loading} type="submit">
+            <Button fullWidth loading={isLoading} type="submit">
               Sign in
             </Button>
           </Center>

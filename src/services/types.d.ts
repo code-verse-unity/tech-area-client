@@ -36,6 +36,13 @@ export interface WhoAmIResponse extends ServerResponse {
     user: User;
   };
 }
+
+export interface AuthResponse extends ServerResponse {
+  data: {
+    user: User;
+    tokens: Tokens;
+  };
+}
 export interface Question {
   id: number;
   title: string;
@@ -46,19 +53,6 @@ export interface Question {
   user: User;
   answers: Answer[];
 }
-
-export interface RegisterResponse {
-  data: Data;
-  path: string;
-  method: string;
-  userAgent: string;
-}
-
-export interface Data {
-  user: User;
-  tokens: Tokens;
-}
-
 export interface Tokens {
   accessToken: string;
 }

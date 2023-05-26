@@ -28,6 +28,7 @@ import { setToken } from "@/utils/token";
 import { useCreateUserMutation } from "@/services/serverApi";
 import { setAuth } from "@/redux/reducers/authSlice";
 import { User } from "@/services/types";
+import { isUser } from "@/utils/typeGuards";
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -71,10 +72,6 @@ const RegisterPage: React.FC<Props> = ({}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleSubmit = async (values: RegisterValues) => {
-    const isUser = (value: any): value is { data: User } => {
-      return value.data !== undefined;
-    };
-
     createUser(values).then((response) => {
       if (isUser(response)) {
         dispatch(setUser(response.data));

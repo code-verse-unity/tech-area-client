@@ -5,3 +5,8 @@ export interface RegisterValues {
   firstname: string;
   role?: string;
 }
+
+export interface LoginValues {
+  email: string;
+  password: string;
+}

@@ -9,6 +9,7 @@ export const ENDPOINTS = {
 
   // auth
   REGISTER_LOCAL: "/auth/register/local",
+  LOGIN_LOCAL: "/auth/login/local",
   WHO_AM_I: "/auth/whoami",
 
   // question resources

@@ -2,11 +2,11 @@ import { Tag } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   Answer,
+  AuthResponse,
   OneAnswerResponse,
   OneQuestionResponse,
   Question,
   QuestionsResponse,
-  RegisterResponse,
   TagsResponse,
   User,
   WhoAmIResponse,
@@ -19,7 +19,7 @@ import {
   GetQuestionsQueryParams,
 } from "./queryParams";
 import { getToken, setToken } from "@/utils/token";
-import { RegisterValues } from "@/features/auth/types";
+import { LoginValues, RegisterValues } from "@/features/auth/types";
 
 export const serverApi = createApi({
   reducerPath: "serverApi",
@@ -117,7 +117,29 @@ export const serverApi = createApi({
           body,
         };
       },
-      transformResponse: (response: RegisterResponse) => {
+      transformResponse: (response: AuthResponse) => {
+        /**
+         * Set the token to the localStorage
+         */
+        setToken(response.data.tokens.accessToken);
+
+        return response.data.user;
+      },
+      invalidatesTags: ["Auth"],
+    }),
+
+    /**
+     * @description Registration
+     */
+    logUser: builder.mutation<User, LoginValues>({
+      query: (body) => {
+        return {
+          url: ENDPOINTS.LOGIN_LOCAL,
+          method: "post",
+          body,
+        };
+      },
+      transformResponse: (response: AuthResponse) => {
         /**
          * Set the token to the localStorage
          */
@@ -141,4 +163,5 @@ export const {
 
   // Post
   useCreateUserMutation,
+  useLogUserMutation,
 } = serverApi;
