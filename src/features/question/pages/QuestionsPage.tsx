@@ -13,6 +13,7 @@ import { useGetQuestionsQuery } from "@/services/serverApi";
 import { useState } from "react";
 import { transformTagIds } from "@/utils/tranformers";
 import { useAuth } from "@/features/auth";
+import Error from "@/features/error/Error";
 
 interface Props {
   // Props type definition here
@@ -36,7 +37,7 @@ const QuestionsPage: React.FC<Props> = ({}) => {
   }
 
   if (isError) {
-    return <div>Error...</div>;
+    return <Error />;
   }
 
   return (

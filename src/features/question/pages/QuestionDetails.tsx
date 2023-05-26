@@ -19,6 +19,7 @@ import dayjs from "@/utils/dayjs";
 import { useAuth } from "@/features/auth";
 import { useAppSelector } from "@/hooks/redux";
 import { selectAuth } from "@/redux/selectors/authSelector";
+import Error from "@/features/error/Error";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -63,12 +64,12 @@ const QuestionDetails = () => {
     questionId,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isError) {
+    return <Error />;
   }
 
-  if (isError) {
-    return <div>Error...</div>;
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
   if (isSuccess) {
