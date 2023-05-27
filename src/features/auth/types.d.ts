@@ -1,3 +1,5 @@
+import { Tag } from "@/utils/types";
+
 export interface RegisterValues {
   email: string;
   password: string;
@@ -9,4 +11,8 @@ export interface RegisterValues {
 export interface LoginValues {
   email: string;
   password: string;
+}
+
+export interface TagsValue {
+  tags: string[];
 }

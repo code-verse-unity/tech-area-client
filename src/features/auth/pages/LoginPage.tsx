@@ -21,9 +21,10 @@ import { LoginValues } from "../types";
 import { useLogUserMutation } from "@/services/serverApi";
 import { isUser } from "@/utils/typeGuards";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setAuth } from "@/redux/reducers/authSlice";
 import { setUser } from "@/redux/reducers/userSlice";
+import { selectAuth } from "@/redux/selectors/authSelector";
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -73,8 +74,6 @@ const LoginPage = () => {
       }
     }
   };
-
-  console.log(form.errors);
 
   return (
     <Center h="100%">

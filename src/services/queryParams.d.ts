@@ -15,3 +15,8 @@ export interface GetOneQuestionQueryParams {
 export interface GetOneAnswerQueryParams {
   answerId: string;
 }
+
+export interface CreateUserTagsParams {
+  userId: number;
+  tags: string[];
+}

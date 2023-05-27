@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setUser } from "@/redux/reducers/userSlice";
 import {
   ActionIcon,
@@ -29,6 +29,7 @@ import { useCreateUserMutation } from "@/services/serverApi";
 import { setAuth } from "@/redux/reducers/authSlice";
 import { User } from "@/services/types";
 import { isUser } from "@/utils/typeGuards";
+import { selectAuth } from "@/redux/selectors/authSelector";
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -69,15 +70,20 @@ const RegisterPage: React.FC<Props> = ({}) => {
     },
   });
 
+  const { authenticated } = useAppSelector(selectAuth);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleSubmit = async (values: RegisterValues) => {
     createUser(values).then((response) => {
       if (isUser(response)) {
         dispatch(setUser(response.data));
-        dispatch(setAuth(true));
+        // dispatch(setAuth(true));
 
-        navigate("/profile");
+        /**
+         * Show modal to create tags
+         */
+        open();
       } else {
         /**
          * Check if the email is already used
@@ -89,6 +95,12 @@ const RegisterPage: React.FC<Props> = ({}) => {
       }
     });
   };
+
+  /**
+   * Redirect the user to the profile page when
+   * he is already authenticated
+   */
+  if (authenticated) navigate("/profile");
 
   return (
     <>

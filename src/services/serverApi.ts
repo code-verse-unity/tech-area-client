@@ -1,4 +1,4 @@
-import { Tag } from "@/utils/types";
+import { Tag, UserTag } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   Answer,
@@ -9,10 +9,12 @@ import {
   QuestionsResponse,
   TagsResponse,
   User,
+  UserTagsResponse,
   WhoAmIResponse,
 } from "./types";
 import { ENDPOINTS } from "./endpoints";
 import {
+  CreateUserTagsParams,
   GetOneAnswerQueryParams,
   GetOneQuestionQueryParams,
   GetQuestionTagsQueryParams,
@@ -125,11 +127,39 @@ export const serverApi = createApi({
 
         return response.data.user;
       },
-      invalidatesTags: ["Auth"],
     }),
 
     /**
-     * @description Registration
+     * @description Create User tag
+     */
+    createUserTag: builder.mutation<UserTag[], CreateUserTagsParams>({
+      query: ({ userId, tags }) => {
+        return {
+          url: ENDPOINTS.CREATE_USER_TAGS.replace(":userId", userId.toString()),
+          method: "post",
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+          body: { tags },
+        };
+      },
+      transformResponse: (response: UserTagsResponse) => {
+        return response.data.tags;
+      },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data: userTags } = await queryFulfilled;
+          // console.log(userTags);
+
+          dispatch(serverApi.util.invalidateTags(["Auth"]));
+        } catch (error) {
+          console.log("error in crate user tags", error);
+        }
+      },
+    }),
+
+    /**
+     * @description Logging
      */
     logUser: builder.mutation<User, LoginValues>({
       query: (body) => {
@@ -164,4 +194,5 @@ export const {
   // Post
   useCreateUserMutation,
   useLogUserMutation,
+  useCreateUserTagMutation,
 } = serverApi;

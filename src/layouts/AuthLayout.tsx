@@ -1,3 +1,5 @@
+import { useAppSelector } from "@/hooks/redux";
+import { selectAuth } from "@/redux/selectors/authSelector";
 import {
   AspectRatio,
   BackgroundImage,
@@ -6,7 +8,7 @@ import {
   Grid,
   createStyles,
 } from "@mantine/core";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -46,6 +48,21 @@ interface Props {
 const AuthLayout: React.FC<Props> = ({}) => {
   const { classes } = useStyles();
   const location = useLocation();
+
+  const { authenticated, isAuthenticating } = useAppSelector(selectAuth);
+  const navigate = useNavigate();
+
+  if (isAuthenticating) {
+    return <div>Loading...</div>;
+  }
+
+  /**
+   * Redirect the user to the profile page when
+   * he is already authenticated
+   */
+  if (authenticated) {
+    navigate("/profile");
+  }
 
   const SideContext = () => (
     <>

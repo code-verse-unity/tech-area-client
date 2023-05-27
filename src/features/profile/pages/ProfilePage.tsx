@@ -10,7 +10,7 @@ import {
   Title,
   createStyles,
 } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import EditUserModal from "../components/EditUserModal";
 
 const useStyles = createStyles((theme) => ({

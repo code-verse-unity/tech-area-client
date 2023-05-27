@@ -43,7 +43,7 @@ const QuestionFilter: React.FC<Props> = ({
    */
   const [locatags, setlocatags] = useState<string[]>([]);
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <div>Loading...</div>;
 
   if (isError) return <div>Error</div>;
 

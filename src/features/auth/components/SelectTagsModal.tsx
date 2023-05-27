@@ -1,7 +1,10 @@
 import { tags } from "@/constants/fakeData";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { setUser, setUserTags } from "@/redux/reducers/userSlice";
-import { useGetTagsQuery } from "@/services/serverApi";
+import {
+  useCreateUserTagMutation,
+  useGetTagsQuery,
+} from "@/services/serverApi";
 import { tagsToMultiselectValues } from "@/utils/tagTransformer";
 import { Tag } from "@/utils/types";
 import {
@@ -13,13 +16,22 @@ import {
   createStyles,
   useMantineTheme,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, yupResolver } from "@mantine/form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TagsValue } from "../types";
+import { isUserTags } from "@/utils/typeGuards";
+import { setAuth } from "@/redux/reducers/authSlice";
+import { selectUserId } from "@/redux/selectors/userSelector";
+import * as Yup from "yup";
 
 interface Props extends ModalProps {
   // Props type definition here
 }
+
+const schema = Yup.object().shape({
+  tags: Yup.array().min(1, "You have at least choose one tag"),
+});
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -32,7 +44,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const initialValues: { tags: Tag[] } = {
+const initialValues: TagsValue = {
   tags: [],
 };
 const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
@@ -41,11 +53,14 @@ const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
   const [loading, setloading] = useState(false);
 
   const { data = [], isLoading, isError } = useGetTagsQuery();
+  const [createUserTags, mutationState] = useCreateUserTagMutation();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const userId = useAppSelector(selectUserId);
 
   const form = useForm({
+    validate: yupResolver(schema),
     initialValues,
   });
 
@@ -57,11 +72,20 @@ const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
     return <div>Error...</div>;
   }
 
-  const handleSubmit = (values: { tags: Tag[] }) => {
-    setloading(true);
-
-    setloading(false);
-    navigate("/profile");
+  const handleSubmit = ({ tags }: TagsValue) => {
+    /**
+     * This will automatically trigger the whoAmI query
+     * The the user will be redirected
+     */
+    createUserTags({ tags, userId }).then((response) => {
+      // console.log(response);
+      if (isUserTags(response)) {
+        dispatch(setUserTags(response.data));
+      } else {
+        console.log("error", response.error);
+        form.setErrors({ tags: "Something goes wrong" });
+      }
+    });
   };
 
   return (

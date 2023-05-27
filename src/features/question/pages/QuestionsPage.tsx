@@ -33,7 +33,7 @@ const QuestionsPage: React.FC<Props> = ({}) => {
   } = useGetQuestionsQuery({ orderDirection, tags: transformTagIds(tags) });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading in question page...</div>;
   }
 
   if (isError) {

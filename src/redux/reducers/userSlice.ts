@@ -1,5 +1,5 @@
 import { User } from "@/services/types";
-import { Tag } from "@/utils/types";
+import { Tag, UserTag } from "@/utils/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: User = {
@@ -26,7 +26,7 @@ const userSlice = createSlice({
     setUser: (state, action: PayloadAction<User>) => {
       return action.payload;
     },
-    setUserTags: (state, action: PayloadAction<Tag[]>) => {
+    setUserTags: (state, action: PayloadAction<UserTag[]>) => {
       return {
         ...state,
         tags: action.payload,

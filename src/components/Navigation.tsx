@@ -146,7 +146,7 @@ export default function Navigation() {
   const { toggleColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
 
-  const isAuthenticated = useAppSelector(selectAuth);
+  const { authenticated } = useAppSelector(selectAuth);
 
   const links = mockdata.map((item) => (
     <UnstyledButton
@@ -271,7 +271,7 @@ export default function Navigation() {
                   />
                 }
               />
-              {isAuthenticated ? (
+              {authenticated ? (
                 <div>user</div>
               ) : (
                 <>

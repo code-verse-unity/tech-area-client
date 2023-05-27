@@ -38,3 +38,10 @@ export interface Tag {
   bgColor: string;
   textColor: string;
 }
+
+export interface UserTag extends Tag {
+  createdAt: string;
+  updatedAt: string;
+  questionScore: number;
+  challengeScore: number;
+}

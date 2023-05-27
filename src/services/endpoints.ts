@@ -6,6 +6,7 @@ export const ENDPOINTS = {
   CREATE_USER: "/users",
   UPDATE_USER: "/users/:id",
   DELETE_USER: "/users/:id",
+  CREATE_USER_TAGS: "/users/:userId/usertags",
 
   // auth
   REGISTER_LOCAL: "/auth/register/local",

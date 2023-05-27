@@ -1,4 +1,4 @@
-import { Tag } from "@/utils/types";
+import { Tag, UserTag } from "@/utils/types";
 
 export interface ServerResponse {
   data: any;
@@ -43,6 +43,13 @@ export interface AuthResponse extends ServerResponse {
     tokens: Tokens;
   };
 }
+
+export interface UserTagsResponse extends ServerResponse {
+  data: {
+    tags: UserTag[];
+  };
+}
+
 export interface Question {
   id: number;
   title: string;
@@ -67,7 +74,7 @@ export interface User {
   imageUrl: string | null;
   createdAt: string;
   updatedAt: string;
-  tags: any[];
+  tags: UserTag[];
 }
 
 export interface Name {

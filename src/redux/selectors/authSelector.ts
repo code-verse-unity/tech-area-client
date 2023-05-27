@@ -5,4 +5,4 @@ import { RootState } from "../store";
  * @param state
  * @returns boolean
  */
-export const selectAuth = (state: RootState) => state.auth.authenticated;
+export const selectAuth = (state: RootState) => state.auth;
