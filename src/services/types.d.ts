@@ -14,9 +14,14 @@ export interface TagsResponse extends ServerResponse {
 }
 
 export interface QuestionsResponse extends ServerResponse {
-  data: {
-    questions: Question[];
-  };
+  data: QuestionResponseData;
+}
+export interface QuestionResponseData {
+  totalItems: number;
+  totalPage: number;
+  next: number | null;
+  previous: number | null;
+  questions: Question[];
 }
 
 export interface OneQuestionResponse extends ServerResponse {

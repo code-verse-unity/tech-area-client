@@ -56,7 +56,6 @@ const SelectTagsModal: React.FC<Props> = ({ opened, onClose }) => {
   const [createUserTags, mutationState] = useCreateUserTagMutation();
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const userId = useAppSelector(selectUserId);
 
   const form = useForm({

@@ -80,7 +80,7 @@ const LeftNavigation = () => {
   ));
 
   return (
-    <Box pl="md" pt={SIDE_TOP_PADDING}>
+    <Box pl="md" pt={SIDE_TOP_PADDING} sx={{ position: "sticky", top: 0 }}>
       <Box className={classes.container}>
         <Title order={4} className={classes.text}>
           Navigation

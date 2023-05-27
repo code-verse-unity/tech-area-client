@@ -3,14 +3,16 @@ import {
   Container,
   Divider,
   Grid,
+  Pagination,
   Stack,
+  Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
 import QuestionCard from "../components/QuestionCard";
 import QuestionFilter from "@/features/question/components/QuestionFilter";
 import { useGetQuestionsQuery } from "@/services/serverApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { transformTagIds } from "@/utils/tranformers";
 import { useAuth } from "@/features/auth";
 import Error from "@/features/error/Error";
@@ -26,11 +28,18 @@ const QuestionsPage: React.FC<Props> = ({}) => {
   const [page, setpage] = useState(1);
   const [tags, settags] = useState<string[]>([]);
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-  } = useGetQuestionsQuery({ orderDirection, tags: transformTagIds(tags) });
+  const { data, isLoading, isError } = useGetQuestionsQuery({
+    orderDirection,
+    tags: transformTagIds(tags),
+    page,
+  });
+
+  useEffect(() => {
+    /**
+     * Scroll to the top every time page change
+     */
+    window.scrollTo({ top: 0 });
+  }, [page]);
 
   if (isLoading) {
     return <div>Loading in question page...</div>;
@@ -53,6 +62,12 @@ const QuestionsPage: React.FC<Props> = ({}) => {
             }}
           >
             <Title order={3}>Questions</Title>
+            <div>
+              <Text fz="md" fw="bold" color="green" component="span">
+                {data?.totalItems}
+              </Text>{" "}
+              results
+            </div>
           </Box>
         </Grid.Col>
         <Grid.Col span={1}>
@@ -65,12 +80,23 @@ const QuestionsPage: React.FC<Props> = ({}) => {
       </Grid>
 
       <Stack pt={theme.spacing.md}>
-        {data.length === 0 ? (
+        {data?.questions.length === 0 ? (
           <div>No questions found</div>
         ) : (
-          data.map((question) => <QuestionCard question={question} />)
+          data?.questions.map((question) => (
+            <QuestionCard key={question.id} question={question} />
+          ))
         )}
       </Stack>
+
+      <Box py={10}>
+        <Pagination
+          total={data?.totalPage ?? 0}
+          value={page}
+          onChange={setpage}
+          color="green"
+        />
+      </Box>
     </Container>
   );
 };

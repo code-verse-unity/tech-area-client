@@ -39,7 +39,7 @@ export default function RootLayout() {
   return (
     <div className={classes.wrapper}>
       <Navigation />
-      <Box maw="100vw">
+      {/* <Box maw="100vw">
         {location.pathname === "/" && (
           <BackgroundImage src={HomeCover} m={0} h={230} maw="100vw">
             <Container h="100%" size="xl">
@@ -63,22 +63,20 @@ export default function RootLayout() {
             </Container>
           </BackgroundImage>
         )}
-      </Box>
-      <Box sx={{ overflow: "hidden" }}>
-        <Container size="xl" px={0}>
-          <Grid>
-            <Grid.Col span={3} hidden={isMobile}>
-              <LeftNavigation />
-            </Grid.Col>
-            <Grid.Col xs={12} md={6} className={classes.body}>
-              <Outlet />
-            </Grid.Col>
-            <Grid.Col span={3} hidden={isMobile}>
-              <RightNavigation />
-            </Grid.Col>
-          </Grid>
-        </Container>
-      </Box>
+      </Box> */}
+      <Container size="xl" px={0}>
+        <Grid m={0}>
+          <Grid.Col span="auto" hidden={isMobile}>
+            <LeftNavigation />
+          </Grid.Col>
+          <Grid.Col xs={12} md={6} className={classes.body}>
+            <Outlet />
+          </Grid.Col>
+          <Grid.Col span="auto" hidden={isMobile}>
+            <RightNavigation />
+          </Grid.Col>
+        </Grid>
+      </Container>
     </div>
   );
 }

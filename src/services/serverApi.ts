@@ -6,6 +6,7 @@ import {
   OneAnswerResponse,
   OneQuestionResponse,
   Question,
+  QuestionResponseData,
   QuestionsResponse,
   TagsResponse,
   User,
@@ -43,12 +44,12 @@ export const serverApi = createApi({
     /**
      * @description Get all questions
      */
-    getQuestions: builder.query<Question[], GetQuestionsQueryParams>({
-      query: ({ orderDirection, tags }) =>
-        `${ENDPOINTS.GET_QUESTIONS}?orderDirection=${orderDirection}&${tags}`,
+    getQuestions: builder.query<QuestionResponseData, GetQuestionsQueryParams>({
+      query: ({ orderDirection, tags, page }) =>
+        `${ENDPOINTS.GET_QUESTIONS}?page=${page}&orderDirection=${orderDirection}&${tags}`,
 
       transformResponse: (response: QuestionsResponse) => {
-        return response.data.questions;
+        return response.data;
       },
       providesTags: ["Questions"],
     }),
@@ -148,7 +149,7 @@ export const serverApi = createApi({
       },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { data: userTags } = await queryFulfilled;
+          await queryFulfilled;
           // console.log(userTags);
 
           dispatch(serverApi.util.invalidateTags(["Auth"]));
