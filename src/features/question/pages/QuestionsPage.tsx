@@ -23,7 +23,7 @@ interface Props {
 
 const QuestionsPage: React.FC<Props> = ({}) => {
   const theme = useMantineTheme();
-  const [orderDirection, setorderDirection] = useState<string>("asc");
+  const [orderDirection, setorderDirection] = useState<string>("desc");
 
   const [page, setpage] = useState(1);
   const [tags, settags] = useState<string[]>([]);

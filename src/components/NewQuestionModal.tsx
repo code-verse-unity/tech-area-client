@@ -8,11 +8,17 @@ import {
   createStyles,
   useMantineTheme,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RichEditor from "./RichTextEditor";
 import { useForm, yupResolver } from "@mantine/form";
 import { QuestionFormValues } from "@/features/question/types";
 import * as Yup from "yup";
+import {
+  useCreateQuestionMutation,
+  useGetTagsQuery,
+} from "@/services/serverApi";
+import { tagsToMultiselectValues } from "@/utils/tagTransformer";
+import { isQuestion } from "@/utils/typeGuards";
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -40,28 +46,44 @@ interface Props extends ModalProps {}
 const NewQuestionModal: React.FC<Props> = ({ opened, onClose }) => {
   const theme = useMantineTheme();
   const { classes } = useStyles();
-  const [data, setData] = useState([
-    { value: "react", label: "React" },
-    { value: "ng", label: "Angular" },
-  ]);
-  const [loading, setloading] = useState(false);
+
   const form = useForm<QuestionFormValues>({
     validate: yupResolver(schema),
     initialValues: {
       tags: [],
       title: "",
-      description: "",
+      content: "",
     },
   });
 
+  const { data: tags, isLoading, isError } = useGetTagsQuery();
+  const [data, setData] = useState<{ label: string; value: string }[]>();
+
+  useEffect(() => {
+    setData(tagsToMultiselectValues(tags));
+  }, [tags]);
+
+  const [
+    createQuestion,
+    { isLoading: isCreatingQuestion, isError: isCreatingQuestionError, error },
+  ] = useCreateQuestionMutation();
+
   const handleSubmit = (values: QuestionFormValues) => {
-    setloading(true);
     console.log(values);
-    form.reset();
-    setTimeout(() => {
-      setloading(false);
-      onClose();
-    }, 1000);
+
+    createQuestion({ body: values })
+      .then((response) => {
+        if (isQuestion(response)) {
+          console.log("question created", response.data);
+          form.reset();
+          onClose();
+        } else {
+          console.log("question creation error", response.error);
+        }
+      })
+      .catch((err) => {
+        console.log("question created err", err);
+      });
   };
 
   return (
@@ -89,21 +111,29 @@ const NewQuestionModal: React.FC<Props> = ({ opened, onClose }) => {
         <RichEditor form={form} />
         <MultiSelect
           label="Choose tag for you question"
+          // @ts-ignore
           data={data}
           placeholder="Select items"
           withAsterisk
           searchable
           creatable
           maxSelectedValues={10}
+          description="Max tags is set to 10"
           getCreateLabel={(query) => `+ Create ${query}`}
           onCreate={(query) => {
-            const item = { value: query, label: query };
+            const item = {
+              value: query.toUpperCase(),
+              label: query.toUpperCase(),
+            };
+            // @ts-ignore
             setData((current) => [...current, item]);
+            console.log(data);
+
             return item;
           }}
           {...form.getInputProps("tags")}
         />
-        <Button type="submit" loading={loading}>
+        <Button type="submit" loading={isLoading || isCreatingQuestion}>
           Publish
         </Button>
       </form>

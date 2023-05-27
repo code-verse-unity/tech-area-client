@@ -19,7 +19,7 @@ export interface QuestionsResponse extends ServerResponse {
 
 export interface UserQuestionsResponse extends ServerResponse {
   data: {
-    questions: Question[];
+    questions: QuestionWithRelation[];
   };
 }
 export interface QuestionResponseData {
@@ -27,12 +27,18 @@ export interface QuestionResponseData {
   totalPage: number;
   next: number | null;
   previous: number | null;
-  questions: Question[];
+  questions: QuestionWithRelation[];
 }
 
 export interface OneQuestionResponse extends ServerResponse {
   data: {
-    question: Question;
+    question: QuestionWithRelation;
+  };
+}
+
+export interface OneQuestionResponseWithoutRelation {
+  data: {
+    question: Questio;
   };
 }
 
@@ -67,6 +73,9 @@ export interface Question {
   content: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface QuestionWithRelation extends Question {
   tags: Tag[];
   user: User;
   answers: Answer[];

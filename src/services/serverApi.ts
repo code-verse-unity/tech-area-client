@@ -7,6 +7,7 @@ import {
   OneQuestionResponse,
   Question,
   QuestionResponseData,
+  QuestionWithRelation,
   QuestionsResponse,
   TagsResponse,
   User,
@@ -16,6 +17,7 @@ import {
 } from "./types";
 import { ENDPOINTS } from "./endpoints";
 import {
+  CreateQuestionParams,
   CreateUserTagsParams,
   GetOneAnswerQueryParams,
   GetOneQuestionQueryParams,
@@ -25,6 +27,7 @@ import {
 } from "./queryParams";
 import { getToken, setToken } from "@/utils/token";
 import { LoginValues, RegisterValues } from "@/features/auth/types";
+import { QuestionFormValues } from "@/features/question/types";
 
 export const serverApi = createApi({
   reducerPath: "serverApi",
@@ -73,7 +76,10 @@ export const serverApi = createApi({
      * @returns Question with user, answers, and tags
      */
     // TODO: invalidate this when new answers or new comments or new votes
-    getOneQuestion: builder.query<Question, GetOneQuestionQueryParams>({
+    getOneQuestion: builder.query<
+      QuestionWithRelation,
+      GetOneQuestionQueryParams
+    >({
       query: ({ questionId }) =>
         ENDPOINTS.GET_ONE_QUESTION.replace(":questionId", `${questionId}`),
 
@@ -99,7 +105,10 @@ export const serverApi = createApi({
      * @description Get User Questions
      * @returns Answer with user, comments, and votes
      */
-    getUserQuestions: builder.query<Question[], GetUserQuestionsParams>({
+    getUserQuestions: builder.query<
+      QuestionWithRelation[],
+      GetUserQuestionsParams
+    >({
       query: ({ userId }) => {
         return {
           url: ENDPOINTS.GET_USER_QUESTIONS.replace(":userId", `${userId}`),
@@ -204,6 +213,26 @@ export const serverApi = createApi({
       },
       invalidatesTags: ["Auth"],
     }),
+
+    /**
+     * @description Create a new question
+     */
+    createQuestion: builder.mutation<Question, CreateQuestionParams>({
+      query: ({ body }) => {
+        return {
+          url: ENDPOINTS.CREATE_QUESTION,
+          method: "post",
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+          body,
+        };
+      },
+      transformResponse: (response: OneQuestionResponse) => {
+        return response.data.question;
+      },
+      invalidatesTags: ["UserQuestions"],
+    }),
   }),
 });
 
@@ -221,4 +250,5 @@ export const {
   useCreateUserMutation,
   useLogUserMutation,
   useCreateUserTagMutation,
+  useCreateQuestionMutation,
 } = serverApi;

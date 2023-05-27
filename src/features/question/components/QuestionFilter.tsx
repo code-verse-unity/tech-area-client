@@ -88,8 +88,8 @@ const QuestionFilter: React.FC<Props> = ({
           >
             <Text fw="bold">Date</Text>
             <Group>
-              <Chip value="asc">Most Recent</Chip>
-              <Chip value="desc">Oldest</Chip>
+              <Chip value="desc">Most Recent</Chip>
+              <Chip value="asc">Oldest</Chip>
             </Group>
           </Chip.Group>
 

@@ -74,16 +74,19 @@ const QuestionDetails = () => {
 
   if (isSuccess) {
     return (
-      <Stack my="lg" className={classes.text}>
+      <Stack my="lg" px="sm" className={classes.text}>
         {/* Question overview */}
         <div className={classes.container}>
+          {/* Question title */}
           <h2 className={classes.title}>{data.title}</h2>
+          {/* Question content */}
           <p
             className={classes.text}
             dangerouslySetInnerHTML={{
               __html: data.content,
             }}
           ></p>
+
           <Flex justify="space-between">
             <Flex className={classes.text} align="center" gap={4}>
               <Avatar radius="xl" src={data.user.imageUrl} />
