@@ -21,6 +21,8 @@ import {
 } from "@tabler/icons-react";
 import { IconAdCircleFilled, IconPlus } from "@tabler/icons-react";
 import NewQuestionModal from "./NewQuestionModal";
+import { useAppSelector } from "@/hooks/redux";
+import { selectAuth } from "@/redux/selectors/authSelector";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -50,27 +52,39 @@ const ActionCard: React.FC<Props> = ({}) => {
   const [opened, { open, close }] = useDisclosure(false);
   const theme = useMantineTheme();
   const { classes } = useStyles();
+
+  const { authenticated, isAuthenticating } = useAppSelector(selectAuth);
+
+  if (isAuthenticating) return <div>Loading in action card...</div>;
+
   return (
     <>
-      <Group className={classes.container}>
-        <Tooltip label="Ask a new question">
-          <ActionIcon color="green" radius="xl" variant="filled" onClick={open}>
-            <IconPlus size="1.125rem" />
-          </ActionIcon>
-        </Tooltip>
+      {authenticated && (
+        <Group className={classes.container}>
+          <Tooltip label="Ask a new question">
+            <ActionIcon
+              color="green"
+              radius="xl"
+              variant="filled"
+              onClick={open}
+            >
+              <IconPlus size="1.125rem" />
+            </ActionIcon>
+          </Tooltip>
 
-        <Tooltip label="Create a challenge">
-          <ActionIcon color="orange.6" radius="xl" variant="filled">
-            <IconDeviceGamepad size="1.125rem" />
-          </ActionIcon>
-        </Tooltip>
+          <Tooltip label="Create a challenge">
+            <ActionIcon color="orange.6" radius="xl" variant="filled">
+              <IconDeviceGamepad size="1.125rem" />
+            </ActionIcon>
+          </Tooltip>
 
-        <Tooltip label="Publish an event">
-          <ActionIcon color="blue.7" radius="xl" variant="filled">
-            <IconCalendar size="1.125rem" />
-          </ActionIcon>
-        </Tooltip>
-      </Group>
+          <Tooltip label="Publish an event">
+            <ActionIcon color="blue.7" radius="xl" variant="filled">
+              <IconCalendar size="1.125rem" />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
+      )}
 
       <NewQuestionModal opened={opened} onClose={close} />
     </>
