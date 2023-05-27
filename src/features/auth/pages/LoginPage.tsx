@@ -67,6 +67,8 @@ const LoginPage = () => {
 
       navigate("/profile");
     } else {
+      console.log(response.error);
+
       // @ts-ignore
       if (response.error?.status === 401) {
         const errors = { email: "", password: "" };

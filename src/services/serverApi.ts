@@ -10,6 +10,7 @@ import {
   QuestionsResponse,
   TagsResponse,
   User,
+  UserQuestionsResponse,
   UserTagsResponse,
   WhoAmIResponse,
 } from "./types";
@@ -20,6 +21,7 @@ import {
   GetOneQuestionQueryParams,
   GetQuestionTagsQueryParams,
   GetQuestionsQueryParams,
+  GetUserQuestionsParams,
 } from "./queryParams";
 import { getToken, setToken } from "@/utils/token";
 import { LoginValues, RegisterValues } from "@/features/auth/types";
@@ -27,7 +29,7 @@ import { LoginValues, RegisterValues } from "@/features/auth/types";
 export const serverApi = createApi({
   reducerPath: "serverApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8001/api/v1" }),
-  tagTypes: ["Tags", "Questions", "Auth"],
+  tagTypes: ["Tags", "Questions", "Auth", "UserQuestions"],
   endpoints: (builder) => ({
     /**
      * @description Get all tags
@@ -68,6 +70,7 @@ export const serverApi = createApi({
 
     /**
      * @description Get One Question
+     * @returns Question with user, answers, and tags
      */
     // TODO: invalidate this when new answers or new comments or new votes
     getOneQuestion: builder.query<Question, GetOneQuestionQueryParams>({
@@ -81,6 +84,7 @@ export const serverApi = createApi({
 
     /**
      * @description Get One Answer
+     * @returns Answer with user, comments, and votes
      */
     getOneAnswer: builder.query<Answer, GetOneAnswerQueryParams>({
       query: ({ answerId }) =>
@@ -89,6 +93,26 @@ export const serverApi = createApi({
       transformResponse: (response: OneAnswerResponse) => {
         return response.data.answer;
       },
+    }),
+
+    /**
+     * @description Get User Questions
+     * @returns Answer with user, comments, and votes
+     */
+    getUserQuestions: builder.query<Question[], GetUserQuestionsParams>({
+      query: ({ userId }) => {
+        return {
+          url: ENDPOINTS.GET_USER_QUESTIONS.replace(":userId", `${userId}`),
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+        };
+      },
+
+      transformResponse: (response: UserQuestionsResponse) => {
+        return response.data.questions;
+      },
+      providesTags: ["UserQuestions"],
     }),
 
     /**
@@ -191,6 +215,7 @@ export const {
   useGetOneQuestionQuery,
   useGetOneAnswerQuery,
   useGetWhoAmIQuery,
+  useGetUserQuestionsQuery,
 
   // Post
   useCreateUserMutation,

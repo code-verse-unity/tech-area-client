@@ -3,6 +3,7 @@ export const ENDPOINTS = {
   // user resources
   GET_USERS: "/users",
   GET_USER: "/users/:id",
+  GET_USER_QUESTIONS: "/users/:userId/questions",
   CREATE_USER: "/users",
   UPDATE_USER: "/users/:id",
   DELETE_USER: "/users/:id",

@@ -8,9 +8,14 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import QuestionCard from "../components/QuestionCard";
+import UserQuestionList from "../components/UserQuestionList";
+import { useAppSelector } from "@/hooks/redux";
+import { selectAuth } from "@/redux/selectors/authSelector";
 
 const HomePage = () => {
   const theme = useMantineTheme();
+  const { authenticated } = useAppSelector(selectAuth);
+
   return (
     <Container my="md">
       <Box
@@ -24,11 +29,8 @@ const HomePage = () => {
         <Title order={3}>Your questions</Title>
         <div>Question that you have asked to the community.</div>
       </Box>
-      <Stack pt={theme.spacing.md}>
-        {/* {[1, 4].map((i) => (
-          <QuestionCard />
-        ))} */}
-      </Stack>
+
+      {authenticated && <UserQuestionList />}
 
       <Divider my={15} />
       <Box

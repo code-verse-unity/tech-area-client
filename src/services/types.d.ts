@@ -16,6 +16,12 @@ export interface TagsResponse extends ServerResponse {
 export interface QuestionsResponse extends ServerResponse {
   data: QuestionResponseData;
 }
+
+export interface UserQuestionsResponse extends ServerResponse {
+  data: {
+    questions: Question[];
+  };
+}
 export interface QuestionResponseData {
   totalItems: number;
   totalPage: number;

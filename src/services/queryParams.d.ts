@@ -20,3 +20,7 @@ export interface CreateUserTagsParams {
   userId: number;
   tags: string[];
 }
+
+export interface GetUserQuestionsParams {
+  userId: number;
+}
