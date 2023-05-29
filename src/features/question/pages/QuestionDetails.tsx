@@ -20,13 +20,24 @@ import { useAuth } from "@/features/auth";
 import { useAppSelector } from "@/hooks/redux";
 import { selectAuth } from "@/redux/selectors/authSelector";
 import Error from "@/features/error/Error";
+import parse, {
+  Element,
+  HTMLReactParserOptions,
+  domToReact,
+} from "html-react-parser";
+import { Prism } from "@mantine/prism";
+import DOMPurify from "dompurify";
+import { IconMessageCircle } from "@tabler/icons-react";
+import QuestionActionGroup from "../components/QuestionActionGroup";
+import QuestionFormModal from "@/components/QuestionFormModal";
+import DeleteQuestionDialog from "../components/DeleteQuestionDialog";
 
 const useStyles = createStyles((theme) => ({
   container: {
     borderRadius: theme.spacing.sm,
     marginBottom: theme.spacing.xs,
     boxShadow: theme.shadows.lg,
-    padding: theme.spacing.md,
+    padding: theme.spacing.lg,
     backgroundColor:
       theme.colorScheme === "dark"
         ? theme.colors.dark[3]
@@ -43,18 +54,21 @@ const useStyles = createStyles((theme) => ({
   username: {
     fontSize: theme.fontSizes.md,
     // fontWeight: "lighter",
-    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+    color: theme.colorScheme === "dark" ? "#fff" : theme.black,
   },
   title: {
     color: theme.colorScheme === "dark" ? "#fff" : theme.black,
     textDecoration: "none",
+    // fontFamily: "Poppins",
   },
 }));
 
 const QuestionDetails = () => {
   const { classes } = useStyles();
-  const [opened, { close, open }] = useDisclosure();
-  const isAuthenticated = useAppSelector(selectAuth);
+  const [opened, { close: closeReply, open: openReply }] = useDisclosure();
+  const [editOpened, { close: closeEdit, open: openEdit }] = useDisclosure();
+  const [deleteOpened, { close: closeDelete, open: openDelete }] =
+    useDisclosure();
 
   /**
    * Get the information of the question specified in params
@@ -72,25 +86,35 @@ const QuestionDetails = () => {
     return <div>Loading...</div>;
   }
 
+  const options: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode instanceof Element && domNode.attribs) {
+        if (domNode.name === "code") {
+          return (
+            <Prism language="javascript">
+              {/* @ts-ignore */}
+              {domNode.children[0]?.data ?? ""}
+            </Prism>
+          );
+        }
+      }
+    },
+  };
+
   if (isSuccess) {
     return (
-      <Stack my="lg" px="sm" className={classes.text}>
+      <Stack my="lg" px="xs" className={classes.text}>
         {/* Question overview */}
         <div className={classes.container}>
           {/* Question title */}
           <h2 className={classes.title}>{data.title}</h2>
           {/* Question content */}
-          <p
-            className={classes.text}
-            dangerouslySetInnerHTML={{
-              __html: data.content,
-            }}
-          ></p>
+          {parse(DOMPurify.sanitize(data.content), options)}
 
-          <Flex justify="space-between">
-            <Flex className={classes.text} align="center" gap={4}>
+          <Flex justify="space-between" mt="sm">
+            <Flex className={classes.text} align="start" gap={4}>
               <Avatar radius="xl" src={data.user.imageUrl} />
-              <Link to="#">{data.user.name.full}</Link>
+              <Text ml="xs">{data.user.name.full}</Text>
             </Flex>
             <Flex className={classes.text} align="center">
               <span className={classes.time}>
@@ -99,7 +123,7 @@ const QuestionDetails = () => {
             </Flex>
           </Flex>
 
-          <Flex gap="sm" mt={10}>
+          <Flex gap="sm" mt="md">
             {data.tags.map((tag) => (
               <Badge
                 key={tag.id}
@@ -125,14 +149,11 @@ const QuestionDetails = () => {
               Answers
             </Flex>
 
-            {/* Create an answer only if the user is authenticated */}
-            {isAuthenticated ? (
-              <Button variant="subtle" size="xs" onClick={open}>
-                Give your answer
-              </Button>
-            ) : (
-              <div>You must have an account to give an answer.</div>
-            )}
+            <QuestionActionGroup
+              openReply={openReply}
+              openEdit={openEdit}
+              openDelete={openDelete}
+            />
           </Flex>
 
           <Accordion variant="filled" radius="lg">
@@ -146,13 +167,27 @@ const QuestionDetails = () => {
         <Drawer
           title="Suggest an solution"
           position="bottom"
-          onClose={close}
+          onClose={closeReply}
           opened={opened}
           overlayProps={{ opacity: 0.5, blur: 4 }}
           size="md"
         >
           hello
         </Drawer>
+        <QuestionFormModal
+          opened={editOpened}
+          onClose={closeEdit}
+          isEditing={true}
+          question={{
+            title: data.title,
+            content: data.content,
+            tags: data.tags.map((tag) => tag.name),
+          }}
+        />
+        <DeleteQuestionDialog
+          deleteOpened={deleteOpened}
+          closeDelete={closeDelete}
+        />
       </Stack>
     );
   } else {

@@ -8,6 +8,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
+import { CustomFonts } from "@/constants/customFonts";
 
 const Providers = ({ children }: PropsWithChildren) => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
@@ -21,11 +22,13 @@ const Providers = ({ children }: PropsWithChildren) => {
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider
+          withGlobalStyles
           theme={{
             ...theme,
             colorScheme,
           }}
         >
+          <CustomFonts />
           {children}
         </MantineProvider>
       </ColorSchemeProvider>

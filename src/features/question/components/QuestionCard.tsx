@@ -1,4 +1,4 @@
-import { Question } from "@/services/types";
+import { QuestionWithRelation } from "@/services/types";
 import {
   Avatar,
   Badge,
@@ -15,6 +15,13 @@ import {
 import { Link } from "react-router-dom";
 import dayjs from "@/utils/dayjs";
 import { useGetQuestionTagsQuery } from "@/services/serverApi";
+import DOMPurify from "dompurify";
+import parse, {
+  Element,
+  HTMLReactParserOptions,
+  domToReact,
+} from "html-react-parser";
+import { Prism } from "@mantine/prism";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -32,7 +39,7 @@ const useStyles = createStyles((theme) => ({
   },
   text: {
     fontSize: theme.fontSizes.sm,
-    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+    color: theme.colorScheme === "dark" ? "whitesmoke" : theme.black,
   },
   username: {
     fontSize: theme.fontSizes.sm,
@@ -46,7 +53,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-  question: Question;
+  question: QuestionWithRelation;
 }
 
 const QuestionCard: React.FC<Props> = ({ question }) => {
@@ -64,6 +71,24 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
 
   if (isError) return <div>Error</div>;
 
+  const sanitizedContent = () => ({
+    __html: DOMPurify.sanitize(question.content),
+  });
+
+  const options: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode instanceof Element && domNode.attribs) {
+        if (domNode.name === "code") {
+          return (
+            <Prism language="javascript">
+              {/* @ts-ignore */}
+              {domNode.children[0]?.data ?? ""}
+            </Prism>
+          );
+        }
+      }
+    },
+  };
   return (
     <Grid className={classes.container}>
       <Grid.Col span={1}>
@@ -84,12 +109,9 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
               {question.title}
             </Link>
           </Title>
-          <p
-            className={classes.text}
-            dangerouslySetInnerHTML={{
-              __html: question.content,
-            }}
-          ></p>
+          <Text lineClamp={3} mb="md" className={classes.text}>
+            {parse(DOMPurify.sanitize(question.content), options)}
+          </Text>
 
           <Flex sx={{ gap: 4 }}>
             {data.map((tag) => (
@@ -103,7 +125,7 @@ const QuestionCard: React.FC<Props> = ({ question }) => {
               </Badge>
             ))}
           </Flex>
-          <Text className={classes.text} mt={5}>
+          <Text className={classes.text} mt="md">
             <b>{question.answers.length}</b> answers
           </Text>
         </Stack>

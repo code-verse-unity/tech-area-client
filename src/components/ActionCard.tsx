@@ -20,7 +20,7 @@ import {
   IconQuestionMark,
 } from "@tabler/icons-react";
 import { IconAdCircleFilled, IconPlus } from "@tabler/icons-react";
-import NewQuestionModal from "./NewQuestionModal";
+import QuestionFormModal from "./QuestionFormModal";
 import { useAppSelector } from "@/hooks/redux";
 import { selectAuth } from "@/redux/selectors/authSelector";
 
@@ -86,7 +86,7 @@ const ActionCard: React.FC<Props> = ({}) => {
         </Group>
       )}
 
-      <NewQuestionModal opened={opened} onClose={close} />
+      <QuestionFormModal opened={opened} onClose={close} />
     </>
   );
 };

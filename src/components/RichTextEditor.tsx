@@ -10,6 +10,18 @@ import { lowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { GetInputProps, UseFormReturnType } from "@mantine/form/lib/types";
 import { QuestionFormValues } from "@/features/question/types";
+import tsLanguageSyntax from "highlight.js/lib/languages/typescript";
+
+lowlight.registerLanguage("ts", tsLanguageSyntax);
+
+function escapeHtml(unsafe: string) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 interface Props {
   form: UseFormReturnType<QuestionFormValues>;
@@ -29,10 +41,9 @@ export default function RichEditor({ form }: Props) {
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       CodeBlockLowlight.configure({
         lowlight,
-        defaultLanguage: "ts",
       }),
     ],
-    content: inputProps.value,
+    content: escapeHtml(inputProps.value),
     onUpdate(props) {
       form.setFieldValue("content", props.editor.getHTML());
     },
