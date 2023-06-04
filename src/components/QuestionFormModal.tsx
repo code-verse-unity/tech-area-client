@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import {
   useCreateQuestionMutation,
   useGetTagsQuery,
+  useUpdateQuestionMutation,
 } from "@/services/serverApi";
 import { tagsToMultiselectValues } from "@/utils/tagTransformer";
 import { isQuestion } from "@/utils/typeGuards";
@@ -48,6 +49,7 @@ const schema = Yup.object().shape({
 });
 
 interface Props extends ModalProps {
+  questionId?: number;
   isEditing?: boolean;
   question?: {
     title: string;
@@ -57,6 +59,7 @@ interface Props extends ModalProps {
 }
 
 const QuestionFormModal: React.FC<Props> = ({
+  questionId = 0,
   opened,
   onClose,
   isEditing = false,
@@ -87,6 +90,15 @@ const QuestionFormModal: React.FC<Props> = ({
     { isLoading: isCreatingQuestion, isError: isCreatingQuestionError, error },
   ] = useCreateQuestionMutation();
 
+  const [
+    updateQuestion,
+    {
+      isLoading: isUpdatingQuestion,
+      isError: isUpdatingQuestionError,
+      error: updateError,
+    },
+  ] = useUpdateQuestionMutation();
+
   const handleSubmit = (values: QuestionFormValues) => {
     if (!isEditing) {
       createQuestion({ body: values })
@@ -104,10 +116,21 @@ const QuestionFormModal: React.FC<Props> = ({
         });
     } else {
       console.log("editing question");
+      updateQuestion({ questionId, body: values })
+        .then((response) => {
+          if (isQuestion(response)) {
+            console.log("question updated", response.data);
+            form.reset();
+            onClose();
+          } else {
+            console.log("question creation error", response);
+          }
+        })
+        .catch((err) => {
+          console.log("question updated err", err);
+        });
     }
   };
-
-  console.log(isMobile);
 
   return (
     <Modal

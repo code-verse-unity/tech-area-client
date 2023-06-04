@@ -30,3 +30,7 @@ export interface GetUserQuestionsParams {
 export interface CreateQuestionParams {
   body: QuestionFormValues;
 }
+
+export interface UpdateQuestionParams extends CreateQuestionParams {
+  questionId: number;
+}

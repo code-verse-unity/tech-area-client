@@ -25,6 +25,7 @@ import {
   GetQuestionTagsQueryParams,
   GetQuestionsQueryParams,
   GetUserQuestionsParams,
+  UpdateQuestionParams,
 } from "./queryParams";
 import { getToken, setToken } from "@/utils/token";
 import { LoginValues, RegisterValues } from "@/features/auth/types";
@@ -87,6 +88,9 @@ export const serverApi = createApi({
       transformResponse: (response: OneQuestionResponse) => {
         return response.data.question;
       },
+      providesTags: (result, error, arg) => [
+        { type: "Questions", id: arg.questionId },
+      ],
     }),
 
     /**
@@ -253,6 +257,33 @@ export const serverApi = createApi({
       },
       invalidatesTags: ["UserQuestions"],
     }),
+
+    /**
+     * @description Update a question
+     */
+    updateQuestion: builder.mutation<Question, UpdateQuestionParams>({
+      query: ({ questionId, body }) => {
+        return {
+          url: ENDPOINTS.UPDATE_QUESTION.replace(
+            ":questionId",
+            `${questionId}`
+          ),
+          method: "put",
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+          body,
+        };
+      },
+
+      transformResponse: (response: OneQuestionResponse) => {
+        return response.data.question;
+      },
+
+      invalidatesTags: (question, error, arg) => [
+        { type: "Questions", id: arg.questionId },
+      ],
+    }),
   }),
 });
 
@@ -274,4 +305,7 @@ export const {
 
   // Delete
   useDeleteQuestionMutation,
+
+  // Update
+  useUpdateQuestionMutation,
 } = serverApi;

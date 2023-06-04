@@ -30,6 +30,8 @@ interface Props {
 export default function RichEditor({ form }: Props) {
   const inputProps = form.getInputProps("content");
 
+  const content = inputProps.value;
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -43,7 +45,7 @@ export default function RichEditor({ form }: Props) {
         lowlight,
       }),
     ],
-    content: escapeHtml(inputProps.value),
+    content,
     onUpdate(props) {
       form.setFieldValue("content", props.editor.getHTML());
     },

@@ -184,6 +184,7 @@ const QuestionDetails = () => {
             content: data.content,
             tags: data.tags.map((tag) => tag.name),
           }}
+          questionId={data.id}
         />
         <DeleteQuestionDialog
           deleteOpened={deleteOpened}
