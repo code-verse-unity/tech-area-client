@@ -153,6 +153,7 @@ const QuestionDetails = () => {
               openReply={openReply}
               openEdit={openEdit}
               openDelete={openDelete}
+              userId={data.user.id}
             />
           </Flex>
 
@@ -187,6 +188,7 @@ const QuestionDetails = () => {
         <DeleteQuestionDialog
           deleteOpened={deleteOpened}
           closeDelete={closeDelete}
+          questionId={questionId}
         />
       </Stack>
     );

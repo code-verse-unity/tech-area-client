@@ -1,3 +1,4 @@
+import { useDeleteQuestionMutation } from "@/services/serverApi";
 import {
   Button,
   Group,
@@ -7,17 +8,34 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
+  questionId: string;
   deleteOpened: boolean;
   closeDelete: () => void;
 }
 
 const DeleteQuestionDialog: React.FC<Props> = ({
+  questionId,
   deleteOpened,
   closeDelete,
 }) => {
   const theme = useMantineTheme();
+  const navigate = useNavigate();
+
+  const [deleteQuestion, { isLoading }] = useDeleteQuestionMutation();
+
+  const handleDelete = () => {
+    deleteQuestion({ questionId })
+      .then((result) => {
+        console.log(result);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Modal
@@ -41,10 +59,20 @@ const DeleteQuestionDialog: React.FC<Props> = ({
           This action is irreverible. All answers will be deleted too.
         </Text>
         <Group grow>
-          <Button size="xs" color="red">
+          <Button
+            size="xs"
+            color="red"
+            onClick={handleDelete}
+            loading={isLoading}
+          >
             Sure! Delete.
           </Button>
-          <Button size="xs" color="gray">
+          <Button
+            size="xs"
+            color="gray"
+            onClick={closeDelete}
+            loading={isLoading}
+          >
             Cancel
           </Button>
         </Group>
