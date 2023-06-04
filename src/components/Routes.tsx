@@ -9,6 +9,7 @@ import ProfilePage from "@/features/profile/pages/ProfilePage";
 import { useAppDispatch } from "@/hooks/redux";
 import { setAuth } from "@/redux/reducers/authSlice";
 import { setUser } from "@/redux/reducers/userSlice";
+import NotFoundPage from "@/features/error/NotFoundPage";
 
 const Routes = () => {
   const location = useLocation();
@@ -39,7 +40,7 @@ const Routes = () => {
         <Route path="forgot-password" element={<HomePage />} />
         <Route path="reset-password" element={<HomePage />} />
       </Route>
-      <Route path="*" element={<HomePage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </ReactRoutes>
   );
 };
