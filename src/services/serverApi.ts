@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   Answer,
   AuthResponse,
+  DeleteQuestionResponse,
   OneAnswerResponse,
   OneQuestionResponse,
   Question,
@@ -233,6 +234,25 @@ export const serverApi = createApi({
       },
       invalidatesTags: ["UserQuestions"],
     }),
+
+    /**
+     * @description Delete a question
+     */
+    deleteQuestion: builder.mutation<
+      DeleteQuestionResponse,
+      GetOneQuestionQueryParams
+    >({
+      query: ({ questionId }) => {
+        return {
+          url: ENDPOINTS.DELETE_QUESTION.replace(":questionId", questionId),
+          method: "delete",
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+        };
+      },
+      invalidatesTags: ["UserQuestions"],
+    }),
   }),
 });
 
@@ -251,4 +271,7 @@ export const {
   useLogUserMutation,
   useCreateUserTagMutation,
   useCreateQuestionMutation,
+
+  // Delete
+  useDeleteQuestionMutation,
 } = serverApi;

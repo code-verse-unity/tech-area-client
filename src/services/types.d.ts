@@ -67,6 +67,12 @@ export interface UserTagsResponse extends ServerResponse {
   };
 }
 
+export interface DeleteQuestionResponse extends ServerResponse {
+  data: {
+    message: string;
+  };
+}
+
 export interface Question {
   id: number;
   title: string;

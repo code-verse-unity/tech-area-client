@@ -19,6 +19,7 @@ export const ENDPOINTS = {
   GET_ONE_QUESTION: "/questions/:questionId",
   GET_QUESTION_TAGS: "/questions/:questionId/tags",
   CREATE_QUESTION: "/questions",
+  DELETE_QUESTION: "/questions/:questionId",
 
   // tag resources
   GET_TAGS: "/tags",
