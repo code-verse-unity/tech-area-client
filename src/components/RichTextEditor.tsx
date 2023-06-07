@@ -24,7 +24,7 @@ function escapeHtml(unsafe: string) {
 }
 
 interface Props {
-  form: UseFormReturnType<QuestionFormValues>;
+  form: UseFormReturnType<any>;
 }
 
 export default function RichEditor({ form }: Props) {

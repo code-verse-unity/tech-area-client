@@ -282,6 +282,7 @@ export const serverApi = createApi({
 
       invalidatesTags: (question, error, arg) => [
         { type: "Questions", id: arg.questionId },
+        "UserQuestions",
       ],
     }),
   }),

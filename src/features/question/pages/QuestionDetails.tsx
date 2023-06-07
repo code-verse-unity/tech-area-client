@@ -31,6 +31,7 @@ import { IconMessageCircle } from "@tabler/icons-react";
 import QuestionActionGroup from "../components/QuestionActionGroup";
 import QuestionFormModal from "@/components/QuestionFormModal";
 import DeleteQuestionDialog from "../components/DeleteQuestionDialog";
+import AnswerFormDrawer from "../components/AnswerFormDrawer";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -165,16 +166,8 @@ const QuestionDetails = () => {
         </Stack>
 
         {/* Drawer for adding answer */}
-        <Drawer
-          title="Suggest an solution"
-          position="bottom"
-          onClose={closeReply}
-          opened={opened}
-          overlayProps={{ opacity: 0.5, blur: 4 }}
-          size="md"
-        >
-          hello
-        </Drawer>
+        <AnswerFormDrawer onClose={closeReply} opened={opened} />
+
         <QuestionFormModal
           opened={editOpened}
           onClose={closeEdit}

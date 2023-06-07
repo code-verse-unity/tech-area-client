@@ -2,6 +2,7 @@ import {
   Accordion,
   ActionIcon,
   Avatar,
+  Box,
   Button,
   Divider,
   Flex,
@@ -17,8 +18,10 @@ import dayjs from "@/utils/dayjs";
 import {
   IconArrowBadgeDownFilled,
   IconArrowBadgeUpFilled,
+  IconDots,
 } from "@tabler/icons-react";
 import { useAuth } from "@/features/auth";
+import AnswerCardMenu from "./AnswerCardMenu";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -110,7 +113,7 @@ const AnswerCard: React.FC<Props> = ({ answerId }) => {
             </ActionIcon>
           </Flex>
 
-          <div>
+          <Box sx={{ flex: 1 }}>
             {/* Content */}
             <p
               dangerouslySetInnerHTML={{
@@ -144,7 +147,10 @@ const AnswerCard: React.FC<Props> = ({ answerId }) => {
                 </Accordion.Control>
               </Flex>
             </Flex>
-          </div>
+          </Box>
+
+          {/* Menu */}
+          <AnswerCardMenu />
         </Flex>
 
         <Accordion.Panel className={classes.accordion}>
