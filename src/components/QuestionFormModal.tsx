@@ -71,6 +71,9 @@ const QuestionFormModal: React.FC<Props> = ({
   const initialValues = isEditing
     ? question
     : { title: "", content: "", tags: [] };
+
+  console.log(initialValues);
+
   const form = useForm<QuestionFormValues>({
     validate: yupResolver(schema),
     initialValues,
@@ -105,7 +108,6 @@ const QuestionFormModal: React.FC<Props> = ({
         .then((response) => {
           if (isQuestion(response)) {
             console.log("question created", response.data);
-            form.reset();
             onClose();
           } else {
             console.log("question creation error", response.error);
@@ -120,7 +122,6 @@ const QuestionFormModal: React.FC<Props> = ({
         .then((response) => {
           if (isQuestion(response)) {
             console.log("question updated", response.data);
-            form.reset();
             onClose();
           } else {
             console.log("question creation error", response);

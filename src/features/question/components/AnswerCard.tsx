@@ -57,9 +57,10 @@ const useStyles = createStyles((theme) => ({
 
 interface Props {
   answerId: number;
+  questionId: number;
 }
 
-const AnswerCard: React.FC<Props> = ({ answerId }) => {
+const AnswerCard: React.FC<Props> = ({ answerId, questionId }) => {
   const { classes } = useStyles();
   const [approved, toggle] = useToggle([false, true]);
   const theme = useColorScheme();
@@ -150,7 +151,11 @@ const AnswerCard: React.FC<Props> = ({ answerId }) => {
           </Box>
 
           {/* Menu */}
-          <AnswerCardMenu userId={data.user.id} />
+          <AnswerCardMenu
+            userId={data.user.id}
+            answer={data}
+            questionId={questionId}
+          />
         </Flex>
 
         <Accordion.Panel className={classes.accordion}>

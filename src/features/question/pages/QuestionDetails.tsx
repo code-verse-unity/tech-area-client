@@ -160,7 +160,7 @@ const QuestionDetails = () => {
 
           <Accordion variant="filled" radius="lg">
             {data.answers.map((answer) => (
-              <AnswerCard answerId={answer.id} />
+              <AnswerCard answerId={answer.id} questionId={data.id} />
             ))}
           </Accordion>
         </Stack>

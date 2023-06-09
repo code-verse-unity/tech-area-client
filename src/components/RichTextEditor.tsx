@@ -11,6 +11,7 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { GetInputProps, UseFormReturnType } from "@mantine/form/lib/types";
 import { QuestionFormValues } from "@/features/question/types";
 import tsLanguageSyntax from "highlight.js/lib/languages/typescript";
+import { useEffect, useState } from "react";
 
 lowlight.registerLanguage("ts", tsLanguageSyntax);
 
@@ -30,8 +31,6 @@ interface Props {
 export default function RichEditor({ form }: Props) {
   const inputProps = form.getInputProps("content");
 
-  const content = inputProps.value;
-
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -45,7 +44,7 @@ export default function RichEditor({ form }: Props) {
         lowlight,
       }),
     ],
-    content,
+    content: inputProps.value,
     onUpdate(props) {
       form.setFieldValue("content", props.editor.getHTML());
     },

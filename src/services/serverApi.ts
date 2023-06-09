@@ -322,7 +322,7 @@ export const serverApi = createApi({
     updateAnswer: builder.mutation<Answer, UpdateAnswerParams>({
       query: ({ answerId, ...body }) => {
         return {
-          url: ENDPOINTS.UPDATE_ANSWER.replace(':answerId', `${answerId}`),
+          url: ENDPOINTS.UPDATE_ANSWER.replace(":answerId", `${answerId}`),
           method: "put",
           headers: {
             authorization: "Bearer " + getToken(),
@@ -364,4 +364,5 @@ export const {
 
   // Update
   useUpdateQuestionMutation,
+  useUpdateAnswerMutation,
 } = serverApi;
