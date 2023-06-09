@@ -37,6 +37,8 @@ import {
   IconMoonStars,
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
+import UserMenu from "./UserMenu";
+import ThemeToggler from "./ThemeToggler";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -143,7 +145,6 @@ export default function Navigation() {
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = useStyles();
-  const { toggleColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
 
   const { authenticated } = useAppSelector(selectAuth);
@@ -252,29 +253,11 @@ export default function Navigation() {
               </a>
             </Group>
             <Group className={classes.hiddenMobile}>
-              <Switch
-                size="lg"
-                color={theme.colorScheme === "dark" ? "gray" : "dark"}
-                onClick={() => toggleColorScheme()}
-                onLabel={
-                  <IconSun
-                    size="1rem"
-                    stroke={2.5}
-                    color={theme.colors.yellow[5]}
-                  />
-                }
-                offLabel={
-                  <IconMoonStars
-                    size="1rem"
-                    stroke={2.5}
-                    color={theme.colors.green[5]}
-                  />
-                }
-              />
               {authenticated ? (
-                <div>user</div>
+                <UserMenu />
               ) : (
                 <>
+                  <ThemeToggler />
                   <Button variant="default" component={Link} to="/auth/login">
                     Log in
                   </Button>
