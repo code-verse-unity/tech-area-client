@@ -28,4 +28,5 @@ export const ENDPOINTS = {
   // answer resources
   GET_ONE_ANSWER: "/answers/:answerId",
   CREATE_ANSWER: "/answers",
+  UPDATE_ANSWER: "/answers/:answerId",
 };

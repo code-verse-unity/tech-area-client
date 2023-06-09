@@ -39,3 +39,7 @@ export interface CreateAnswerParams {
   questionId: number;
   content: string;
 }
+
+export interface UpdateAnswerParams extends CreateAnswerParams {
+  answerId: number;
+}

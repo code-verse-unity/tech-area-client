@@ -26,6 +26,7 @@ import {
   GetQuestionTagsQueryParams,
   GetQuestionsQueryParams,
   GetUserQuestionsParams,
+  UpdateAnswerParams,
   UpdateQuestionParams,
 } from "./queryParams";
 import { getToken, setToken } from "@/utils/token";
@@ -292,7 +293,7 @@ export const serverApi = createApi({
     }),
 
     /**
-     * @description Update a question
+     * @description Create answer
      */
     createAnswer: builder.mutation<Answer, CreateAnswerParams>({
       query: (body) => {
@@ -311,8 +312,31 @@ export const serverApi = createApi({
       },
 
       invalidatesTags: (question, error, arg) => [
-        { type: "Answers", id: arg.questionId },
         { type: "Questions", id: arg.questionId },
+      ],
+    }),
+
+    /**
+     * @description Update answer
+     */
+    updateAnswer: builder.mutation<Answer, UpdateAnswerParams>({
+      query: ({ answerId, ...body }) => {
+        return {
+          url: ENDPOINTS.UPDATE_ANSWER.replace(':answerId', `${answerId}`),
+          method: "put",
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+          body,
+        };
+      },
+
+      transformResponse: (response: OneAnswerResponse) => {
+        return response.data.answer;
+      },
+
+      invalidatesTags: (question, error, arg) => [
+        { type: "Answers", id: arg.answerId },
       ],
     }),
   }),
