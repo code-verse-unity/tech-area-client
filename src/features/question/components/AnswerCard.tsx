@@ -150,7 +150,7 @@ const AnswerCard: React.FC<Props> = ({ answerId }) => {
           </Box>
 
           {/* Menu */}
-          <AnswerCardMenu />
+          <AnswerCardMenu userId={data.user.id} />
         </Flex>
 
         <Accordion.Panel className={classes.accordion}>

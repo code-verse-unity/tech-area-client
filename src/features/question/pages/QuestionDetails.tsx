@@ -166,7 +166,11 @@ const QuestionDetails = () => {
         </Stack>
 
         {/* Drawer for adding answer */}
-        <AnswerFormDrawer onClose={closeReply} opened={opened} />
+        <AnswerFormDrawer
+          questionId={data.id}
+          onClose={closeReply}
+          opened={opened}
+        />
 
         <QuestionFormModal
           opened={editOpened}

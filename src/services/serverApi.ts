@@ -18,6 +18,7 @@ import {
 } from "./types";
 import { ENDPOINTS } from "./endpoints";
 import {
+  CreateAnswerParams,
   CreateQuestionParams,
   CreateUserTagsParams,
   GetOneAnswerQueryParams,
@@ -34,7 +35,7 @@ import { QuestionFormValues } from "@/features/question/types";
 export const serverApi = createApi({
   reducerPath: "serverApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8001/api/v1" }),
-  tagTypes: ["Tags", "Questions", "Auth", "UserQuestions"],
+  tagTypes: ["Tags", "Questions", "Answers", "Auth", "UserQuestions"],
   endpoints: (builder) => ({
     /**
      * @description Get all tags
@@ -104,6 +105,10 @@ export const serverApi = createApi({
       transformResponse: (response: OneAnswerResponse) => {
         return response.data.answer;
       },
+
+      providesTags: (result, error, arg) => [
+        { type: "Answers", id: arg.answerId },
+      ],
     }),
 
     /**
@@ -285,6 +290,31 @@ export const serverApi = createApi({
         "UserQuestions",
       ],
     }),
+
+    /**
+     * @description Update a question
+     */
+    createAnswer: builder.mutation<Answer, CreateAnswerParams>({
+      query: (body) => {
+        return {
+          url: ENDPOINTS.CREATE_ANSWER,
+          method: "post",
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+          body,
+        };
+      },
+
+      transformResponse: (response: OneAnswerResponse) => {
+        return response.data.answer;
+      },
+
+      invalidatesTags: (question, error, arg) => [
+        { type: "Answers", id: arg.questionId },
+        { type: "Questions", id: arg.questionId },
+      ],
+    }),
   }),
 });
 
@@ -303,6 +333,7 @@ export const {
   useLogUserMutation,
   useCreateUserTagMutation,
   useCreateQuestionMutation,
+  useCreateAnswerMutation,
 
   // Delete
   useDeleteQuestionMutation,

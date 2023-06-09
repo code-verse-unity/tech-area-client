@@ -27,4 +27,5 @@ export const ENDPOINTS = {
 
   // answer resources
   GET_ONE_ANSWER: "/answers/:answerId",
+  CREATE_ANSWER: "/answers",
 };

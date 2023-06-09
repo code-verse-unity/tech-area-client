@@ -1,3 +1,5 @@
+import { useAppSelector } from "@/hooks/redux";
+import { selectUserId } from "@/redux/selectors/userSelector";
 import { ActionIcon, Center, Menu, createStyles } from "@mantine/core";
 import { IconDots, IconEdit, IconReport, IconTrash } from "@tabler/icons-react";
 
@@ -13,11 +15,12 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface Props {
-  // Props type definition here
+  userId: number; // id of the user that post the comment
 }
 
-const AnswerCardMenu: React.FC<Props> = ({}) => {
+const AnswerCardMenu: React.FC<Props> = ({ userId }) => {
   const { classes } = useStyles();
+  const currentUserId = useAppSelector(selectUserId);
 
   return (
     <Menu shadow="md" radius="md" width={200} position="bottom-end">
@@ -33,6 +36,11 @@ const AnswerCardMenu: React.FC<Props> = ({}) => {
               <IconEdit size="16" color="blue" />
             </Center>
           }
+          /**
+           * Hide this action when the user is not suppose
+           * to be able to update other user answer
+           */
+          sx={{ display: userId === currentUserId ? "flex" : "none" }}
         >
           Edit
         </Menu.Item>
@@ -42,6 +50,11 @@ const AnswerCardMenu: React.FC<Props> = ({}) => {
               <IconTrash size="16" color="red" />
             </Center>
           }
+          /**
+           * Hide this action when the user is not suppose
+           * to be able to delete other user answer
+           */
+          sx={{ display: userId === currentUserId ? "flex" : "none" }}
         >
           Delete
         </Menu.Item>
